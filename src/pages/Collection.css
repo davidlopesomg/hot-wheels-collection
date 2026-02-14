@@ -466,3 +466,160 @@
   background-color: #f5f5f5;
   cursor: not-allowed;
 }
+
+/* Dark mode styles */
+.dark-mode .collection-header {
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.dark-mode .collection-header h1 {
+  color: var(--color-primary);
+}
+
+.dark-mode .add-car-btn:hover {
+  background-color: var(--color-secondary);
+}
+
+.dark-mode .collection-controls {
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.dark-mode .search-input,
+.dark-mode .filter-select {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.dark-mode .search-input:focus,
+.dark-mode .filter-select:focus {
+  border-color: var(--color-primary);
+  background: var(--color-bg);
+}
+
+.dark-mode .table-container {
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.dark-mode table thead {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode table thead th {
+  color: white;
+}
+
+.dark-mode table tbody tr {
+  background: var(--color-card-bg);
+  border-bottom-color: var(--color-border);
+}
+
+.dark-mode table tbody tr:hover {
+  background: var(--color-hover-bg);
+}
+
+.dark-mode table tbody tr.even {
+  background: var(--color-bg-tertiary);
+}
+
+.dark-mode table tbody tr.even:hover {
+  background: var(--color-hover-bg);
+}
+
+.dark-mode table tbody td {
+  color: var(--color-text);
+  border-bottom-color: var(--color-border);
+}
+
+.dark-mode .edit-btn {
+  background-color: #4a9fd8;
+  color: white;
+}
+
+.dark-mode .edit-btn:hover {
+  background-color: var(--color-primary);
+}
+
+.dark-mode .delete-btn {
+  background-color: #e74c5f;
+  color: white;
+}
+
+.dark-mode .delete-btn:hover {
+  background-color: var(--color-secondary);
+}
+
+.dark-mode .action-buttons {
+  border-left-color: var(--color-border);
+}
+
+.dark-mode .empty-state {
+  background: var(--color-card-bg);
+  color: var(--color-text);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.dark-mode .empty-state h2 {
+  color: var(--color-primary);
+}
+
+.dark-mode .empty-state p {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .pagination {
+  background: var(--color-card-bg);
+  box-shadow: 0 -2px 4px var(--color-shadow);
+}
+
+.dark-mode .pagination-info {
+  color: var(--color-text);
+}
+
+.dark-mode .pagination-button:hover:not(:disabled) {
+  background-color: var(--color-primary);
+}
+
+.dark-mode .pagination-button:disabled {
+  background-color: var(--color-bg-tertiary);
+  cursor: not-allowed;
+}
+
+.dark-mode .search-input:disabled {
+  background-color: var(--color-bg-tertiary);
+}
+
+.dark-mode .bulk-actions {
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.dark-mode .checkbox-label {
+  color: var(--color-text);
+}
+
+.dark-mode .bulk-delete-btn:hover {
+  background-color: #c13547;
+}
+
+.dark-mode .file-upload-area {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .file-upload-area.drag-over {
+  border-color: var(--color-primary);
+  background: var(--color-hover-bg);
+}
+
+.dark-mode .file-upload-btn {
+  background: var(--color-primary);
+}
+
+.dark-mode .file-upload-btn:hover:not(.disabled) {
+  background: #3b8acc;
+}

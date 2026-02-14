@@ -270,3 +270,89 @@ label:has(+ textarea[required])::after {
     width: 100%;
   }
 }
+
+/* Dark mode styles */
+.dark-mode .add-car-overlay {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.dark-mode .add-car-form {
+  background: var(--color-card-bg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .form-header h2 {
+  color: var(--color-secondary);
+}
+
+.dark-mode .scanned-code {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .scanned-code strong {
+  color: var(--color-primary);
+}
+
+.dark-mode .form-field label {
+  color: var(--color-text);
+}
+
+.dark-mode .form-field input,
+.dark-mode .form-field textarea,
+.dark-mode .form-field select {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .form-field input:focus,
+.dark-mode .form-field textarea:focus,
+.dark-mode .form-field select:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(231, 76, 95, 0.15);
+  background-color: var(--color-bg);
+}
+
+.dark-mode .form-field input:invalid:not(:focus):not(:placeholder-shown),
+.dark-mode .form-field textarea:invalid:not(:focus):not(:placeholder-shown),
+.dark-mode .form-field select:invalid:not(:focus) {
+  border-color: #e74c5f;
+  background-color: rgba(231, 76, 95, 0.1);
+}
+
+.dark-mode .form-field input:valid[required]:not(:placeholder-shown),
+.dark-mode .form-field textarea:valid[required]:not(:placeholder-shown),
+.dark-mode .form-field select:valid[required] {
+  border-color: #4caf50;
+}
+
+.dark-mode .form-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23e4e6eb' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+}
+
+.dark-mode .btn-scanner-icon {
+  background: linear-gradient(135deg, #4a9fd8 0%, #5a6fd8 100%);
+}
+
+.dark-mode .btn-scanner-icon:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #4a9fd8 100%);
+  box-shadow: 0 4px 8px rgba(74, 159, 216, 0.4);
+}
+
+.dark-mode .btn-back {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+}
+
+.dark-mode .btn-back:hover {
+  background: var(--color-border);
+}
+
+.dark-mode .btn-secondary {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+}
+
+.dark-mode .btn-secondary:hover {
+  background: var(--color-border);
+}

@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
 import LanguageSwitcher from './LanguageSwitcher';
+import DarkModeToggle from './DarkModeToggle';
 import './Navigation.css';
 
 const Navigation = () => {
@@ -41,7 +42,10 @@ const Navigation = () => {
             <span>{t('nav.admin')}</span>
           </NavLink>
         </div>
-        <LanguageSwitcher />
+        <div className="nav-controls">
+          <DarkModeToggle />
+          <LanguageSwitcher />
+        </div>
       </div>
     </nav>
   );

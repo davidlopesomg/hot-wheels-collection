@@ -327,3 +327,84 @@
     height: 120px;
   }
 }
+
+/* Dark mode styles */
+.dark-mode .ocr-scanner-overlay {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.dark-mode .ocr-scanner-modal {
+  background: var(--color-card-bg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .ocr-header {
+  background: linear-gradient(135deg, #e74c5f 0%, #4a9fd8 100%);
+  border-bottom-color: var(--color-border);
+}
+
+.dark-mode .ocr-instructions {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .btn-camera,
+.dark-mode .btn-upload {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .btn-camera:hover,
+.dark-mode .btn-upload:hover {
+  background: var(--color-hover-bg);
+  border-color: var(--color-secondary);
+}
+
+.dark-mode .video-container {
+  background: #000;
+}
+
+.dark-mode .scan-frame {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 20px rgba(231, 76, 95, 0.5);
+}
+
+.dark-mode .ocr-actions button {
+  background: var(--color-primary);
+}
+
+.dark-mode .ocr-actions button:hover:not(:disabled) {
+  background: #3b8acc;
+}
+
+.dark-mode .ocr-loading {
+  color: var(--color-text);
+}
+
+.dark-mode .ocr-error {
+  background: rgba(231, 76, 95, 0.1);
+  border-color: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.dark-mode .ocr-result {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .result-code {
+  color: var(--color-primary);
+}
+
+.dark-mode .btn-use-code {
+  background: var(--color-primary);
+}
+
+.dark-mode .btn-use-code:hover {
+  background: #3b8acc;
+}
+
+.dark-mode .camera-input:focus {
+  border-color: var(--color-secondary);
+}

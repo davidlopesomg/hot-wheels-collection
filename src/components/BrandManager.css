@@ -503,3 +503,107 @@
     padding: 1.5rem;
   }
 }
+
+/* Dark mode styles */
+.dark-mode .search-input {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(74, 159, 216, 0.15);
+  background: var(--color-bg);
+}
+
+.dark-mode .brand-count {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .loading-message {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .brand-form-overlay {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.dark-mode .brand-form-container {
+  background: var(--color-card-bg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .brand-form-container h3 {
+  color: var(--color-secondary);
+}
+
+.dark-mode .brand-form-container .form-field label {
+  color: var(--color-text);
+}
+
+.dark-mode .brand-form-container .form-field input,
+.dark-mode .brand-form-container .form-field select,
+.dark-mode .brand-form-container .form-field textarea {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .brand-form-container .form-field input:focus,
+.dark-mode .brand-form-container .form-field select:focus,
+.dark-mode .brand-form-container .form-field textarea:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(231, 76, 95, 0.15);
+  background: var(--color-bg);
+}
+
+.dark-mode .brand-card {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.dark-mode .brand-card:hover {
+  box-shadow: 0 4px 16px var(--color-shadow);
+  border-color: var(--color-primary);
+}
+
+.dark-mode .brand-logo-container {
+  background: var(--color-bg-tertiary);
+}
+
+.dark-mode .brand-info h4 {
+  color: var(--color-text);
+}
+
+.dark-mode .brand-country {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .brand-description {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .brand-car-count {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode .brand-actions button {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+}
+
+.dark-mode .brand-actions button:hover {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode .brand-actions .delete-btn:hover {
+  background: var(--color-secondary);
+}
+
+.dark-mode .empty-message {
+  color: var(--color-text-secondary);
+}

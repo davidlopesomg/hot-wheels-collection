@@ -326,3 +326,68 @@
     font-size: 1.1rem;
   }
 }
+
+/* Dark mode styles */
+.dark-mode .stat-card {
+  background: var(--color-card-bg);
+  color: var(--color-text);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.dark-mode .stat-card.total {
+  background: linear-gradient(135deg, #D42F41 0%, #2C84C7 100%);
+  color: white;
+}
+
+.dark-mode .chart-card,
+.dark-mode .pie-chart-card {
+  background: var(--color-card-bg);
+  color: var(--color-text);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.dark-mode .chart-card h2,
+.dark-mode .pie-chart-card h2 {
+  color: var(--color-primary);
+}
+
+.dark-mode .chart-item:hover {
+  background-color: var(--color-hover-bg);
+}
+
+.dark-mode .chart-bar-container {
+  background: var(--color-bg-tertiary);
+  box-shadow: inset 0 1px 3px var(--color-shadow);
+}
+
+.dark-mode .dashboard-filter {
+  background: var(--color-card-bg);
+  box-shadow: 0 2px 4px var(--color-shadow);
+}
+
+.dark-mode .dashboard-filter label {
+  color: var(--color-primary);
+}
+
+.dark-mode .manufacturer-filter-select {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+  border-color: var(--color-primary);
+}
+
+.dark-mode .manufacturer-filter-select:hover {
+  background: var(--color-bg-secondary);
+}
+
+.dark-mode .empty-state-dashboard {
+  background:var(--color-card-bg);
+  color: var(--color-text);
+}
+
+.dark-mode .empty-state-dashboard h2 {
+  color: var(--color-secondary);
+}
+
+.dark-mode .empty-state-dashboard p:last-child {
+  color: var(--color-primary);
+}

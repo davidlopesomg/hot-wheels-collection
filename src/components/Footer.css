@@ -183,3 +183,33 @@
     transform: translateX(0) translateY(-2px);
   }
 }
+
+/* Dark mode styles */
+.dark-mode .app-footer {
+  background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 100%);
+  border-top-color: var(--color-secondary);
+}
+
+.dark-mode .footer-section h3 {
+  color: var(--color-secondary);
+}
+
+.dark-mode .manufacturer-item {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dark-mode .manufacturer-item:hover {
+  background: rgba(231, 76, 95, 0.25);
+}
+
+.dark-mode .links a {
+  color: #e4e6eb;
+}
+
+.dark-mode .links a:hover {
+  color: var(--color-accent);
+}
+
+.dark-mode .footer-bottom p {
+  color: #b0b3b8;
+}

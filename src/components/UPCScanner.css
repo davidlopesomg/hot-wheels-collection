@@ -294,3 +294,68 @@
     width: 100%;
   }
 }
+
+/* Dark mode styles */
+.dark-mode .upc-scanner-overlay {
+  background: rgba(0, 0, 0, 0.95);
+}
+
+.dark-mode .upc-scanner-container {
+  background: var(--color-card-bg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .scanner-header {
+  border-bottom-color: var(--color-border);
+}
+
+.dark-mode .scanner-header h2 {
+  color: var(--color-secondary);
+}
+
+.dark-mode .btn-close {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+}
+
+.dark-mode .btn-close:hover {
+  background: var(--color-secondary);
+  color: white;
+}
+
+.dark-mode .scanner-section h3 {
+  color: var(--color-text);
+}
+
+.dark-mode .manual-input-group input {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .manual-input-group input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(74, 159, 216, 0.15);
+  background: var(--color-bg);
+}
+
+.dark-mode .btn-scan,
+.dark-mode .btn-capture {
+  background: linear-gradient(135deg, #4a9fd8 0%, #5a6fd8 100%);
+}
+
+.dark-mode .btn-scan:hover,
+.dark-mode .btn-capture:hover {
+  background: linear-gradient(135deg, #5a6fd8 0%, #4a9fd8 100%);
+  box-shadow: 0 4px 12px rgba(74, 159, 216, 0.4);
+}
+
+.dark-mode .scanner-loading {
+  color: var(--color-text);
+}
+
+.dark-mode .scanner-error {
+  background: rgba(231, 76, 95, 0.1);
+  border-color: var(--color-secondary);
+  color: var(--color-text);
+}

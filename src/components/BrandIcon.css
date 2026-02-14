@@ -116,3 +116,35 @@
   pointer-events: none;
   margin-bottom: 2px;
 }
+
+/* Dark mode styles */
+.dark-mode .brand-icon-svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.dark-mode .brand-icon-img {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+.dark-mode .brand-icon-container.icon-error::before {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .brand-icon-text {
+  color: var(--color-text);
+  background: rgba(74, 159, 216, 0.15);
+}
+
+.dark-mode .brand-icon-text:hover {
+  background: rgba(74, 159, 216, 0.25);
+}
+
+.dark-mode .brand-icon-container[title]:hover::after {
+  background: rgba(255, 255, 255, 0.98);
+  color: var(--color-text);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .brand-icon-container[title]:hover::before {
+  border-top-color: rgba(255, 255, 255, 0.98);
+}

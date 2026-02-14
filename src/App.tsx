@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext';
+import { DarkModeProvider } from './contexts/DarkModeContext';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
@@ -41,11 +42,13 @@ function App() {
   }, []);
 
   return (
-    <LanguageProvider>
-      <HashRouter>
-        <AppContent />
-      </HashRouter>
-    </LanguageProvider>
+    <DarkModeProvider>
+      <LanguageProvider>
+        <HashRouter>
+          <AppContent />
+        </HashRouter>
+      </LanguageProvider>
+    </DarkModeProvider>
   );
 }
 

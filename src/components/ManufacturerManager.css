@@ -556,3 +556,109 @@
     width: 100%;
   }
 }
+
+/* Dark mode styles */
+.dark-mode .search-input {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(74, 159, 216, 0.15);
+  background: var(--color-bg);
+}
+
+.dark-mode .manufacturer-count {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .loading-message {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .manufacturer-form-overlay {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.dark-mode .manufacturer-form-container {
+  background: var(--color-card-bg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+}
+
+.dark-mode .manufacturer-form-container h3 {
+  color: var(--color-secondary);
+}
+
+.dark-mode .manufacturer-form-container .form-field label {
+  color: var(--color-text);
+}
+
+.dark-mode .manufacturer-form-container .form-field input,
+.dark-mode .manufacturer-form-container .form-field select,
+.dark-mode .manufacturer-form-container .form-field textarea {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.dark-mode .manufacturer-form-container .form-field input:focus,
+.dark-mode .manufacturer-form-container .form-field select:focus,
+.dark-mode .manufacturer-form-container .form-field textarea:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(231, 76, 95, 0.15);
+  background: var(--color-bg);
+}
+
+.dark-mode .manufacturer-card {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+  box-shadow: 0 2px 8px var(--color-shadow);
+}
+
+.dark-mode .manufacturer-card:hover {
+  box-shadow: 0 4px 16px var(--color-shadow);
+  border-color: var(--color-primary);
+}
+
+.dark-mode .manufacturer-logo-container {
+  background: var(--color-bg-tertiary);
+}
+
+.dark-mode .manufacturer-info h4 {
+  color: var(--color-text);
+}
+
+.dark-mode .manufacturer-upc {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .manufacturer-car-count {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode .manufacturer-actions {
+  border-top-color: var(--color-border);
+}
+
+.dark-mode .btn-edit {
+  background: var(--color-primary);
+}
+
+.dark-mode .btn-edit:hover {
+  background: #3b8acc;
+}
+
+.dark-mode .btn-delete {
+  background: var(--color-secondary);
+}
+
+.dark-mode .btn-delete:hover {
+  background: #c13547;
+}
+
+.dark-mode .empty-message {
+  color: var(--color-text-secondary);
+}

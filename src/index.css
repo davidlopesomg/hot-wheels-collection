@@ -12,8 +12,27 @@
   font-weight: 400;
 
   color-scheme: light;
-  color: #213547;
-  background-color: #ffffff;
+  
+  /* Light mode colors */
+  --color-text: #213547;
+  --color-text-secondary: #666;
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8f9fa;
+  --color-bg-tertiary: #fafafa;
+  --color-border: #e0e0e0;
+  --color-border-light: #eee;
+  --color-shadow: rgba(0, 0, 0, 0.1);
+  --color-hover-bg: #f0f7ff;
+  --color-card-bg: white;
+  
+  /* Brand colors */
+  --color-primary: #2C84C7;
+  --color-secondary: #D42F41;
+  --color-accent: #F1D74D;
+  
+  /* Apply base colors */
+  color: var(--color-text);
+  background-color: var(--color-bg);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -22,6 +41,30 @@
 
   /* Enable smooth scrolling */
   scroll-behavior: smooth;
+  
+  /* Smooth transitions for theme changes */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode theme */
+.dark-mode {
+  color-scheme: dark;
+  
+  --color-text: #e4e6eb;
+  --color-text-secondary: #b0b3b8;
+  --color-bg: #18191a;
+  --color-bg-secondary: #242526;
+  --color-bg-tertiary: #2d2e2f;
+  --color-border: #3a3b3c;
+  --color-border-light: #3e4042;
+  --color-shadow: rgba(0, 0, 0, 0.4);
+  --color-hover-bg: #2d3748;
+  --color-card-bg: #242526;
+  
+  /* Adjust brand colors for dark mode (slightly lighter) */
+  --color-primary: #4a9fd8;
+  --color-secondary: #e74c5f;
+  --color-accent: #f4dc6b;
 }
 
 body {
