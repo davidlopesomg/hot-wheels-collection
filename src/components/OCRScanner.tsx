@@ -20,6 +20,9 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
+  
+  // Detect if running on mobile device
+  const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   // Pattern for Hot Wheels product codes: XXX##-N### ##A or similar
   const extractProductCode = (text: string): string | null => {
@@ -45,6 +48,12 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
   };
 
   const startCamera = async () => {
+    // On mobile devices, use file input with capture instead of getUserMedia
+    if (isMobileDevice) {
+      fileInputRef.current?.click();
+      return;
+    }
+    
     try {
       setError('');
       
@@ -70,6 +79,7 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
         videoRef.current.srcObject = stream;
         videoRef.current.setAttribute('playsinline', 'true');
         videoRef.current.setAttribute('webkit-playsinline', 'true');
+        videoRef.current.setAttribute('muted', 'true');
         await videoRef.current.play();
         streamRef.current = stream;
         setIsCameraActive(true);
@@ -195,20 +205,39 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
 
           {!previewImage && !isCameraActive && (
             <div className="ocr-options">
-              <button className="btn-camera" onClick={startCamera}>
-                📷 {t('scanner.ocr.useCamera') || 'Use Camera'}
-              </button>
-              <button className="btn-upload" onClick={() => fileInputRef.current?.click()}>
-                🖼️ {t('scanner.ocr.uploadImage') || 'Upload Image'}
-              </button>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                capture="environment"
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
-              />
+              {isMobileDevice ? (
+                // On mobile, show single button that opens camera via file input
+                <>
+                  <button className="btn-camera" onClick={startCamera}>
+                    📷 {t('scanner.ocr.takePicture') || 'Take Picture'}
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    capture="environment"
+                    onChange={handleFileUpload}
+                    style={{ display: 'none' }}
+                  />
+                </>
+              ) : (
+                // On desktop, show both options
+                <>
+                  <button className="btn-camera" onClick={startCamera}>
+                    📷 {t('scanner.ocr.useCamera') || 'Use Camera'}
+                  </button>
+                  <button className="btn-upload" onClick={() => fileInputRef.current?.click()}>
+                    🖼️ {t('scanner.ocr.uploadImage') || 'Upload Image'}
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    style={{ display: 'none' }}
+                  />
+                </>
+              )}
             </div>
           )}
 

@@ -15,6 +15,10 @@ const UPCScanner = ({ onBarcodeDetected, onCancel }: UPCScannerProps) => {
   const [manualUPC, setManualUPC] = useState('');
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const scannerIdRef = useRef<string>('upc-reader');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Detect if running on mobile device
+  const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
   useEffect(() => {
     return () => {
@@ -23,6 +27,12 @@ const UPCScanner = ({ onBarcodeDetected, onCancel }: UPCScannerProps) => {
   }, []);
 
   const startScanner = async () => {
+    // On mobile devices, use file input with capture instead of html5-qrcode
+    if (isMobileDevice) {
+      fileInputRef.current?.click();
+      return;
+    }
+    
     try {
       setError('');
       setIsScanning(true);
@@ -137,7 +147,7 @@ const UPCScanner = ({ onBarcodeDetected, onCancel }: UPCScannerProps) => {
         <div className="scanner-content">
           {/* Camera Scanner */}
           <div className="scanner-section">
-            <h3>{t('admin.manufacturers.scanWithCamera')}</h3>
+            <h3>{isMobileDevice ? (t('admin.manufacturers.takePicture') || 'Take Picture of Barcode') : (t('admin.manufacturers.scanWithCamera') || 'Scan with Camera')}</h3>
             <div id={scannerIdRef.current} className="scanner-viewport"></div>
             
             {!isScanning && (
@@ -145,7 +155,7 @@ const UPCScanner = ({ onBarcodeDetected, onCancel }: UPCScannerProps) => {
                 onClick={startScanner} 
                 className="btn-primary btn-scan"
               >
-                📷 {t('admin.manufacturers.startScanning')}
+                📷 {isMobileDevice ? (t('admin.manufacturers.takePicture') || 'Take Picture') : (t('admin.manufacturers.startScanning') || 'Start Scanning')}
               </button>
             )}
 
@@ -154,26 +164,36 @@ const UPCScanner = ({ onBarcodeDetected, onCancel }: UPCScannerProps) => {
                 onClick={stopScanner} 
                 className="btn-secondary btn-scan"
               >
-                ⏹ {t('admin.manufacturers.stopScanning')}
+                ⏹ {t('admin.manufacturers.stopScanning') || 'Stop Scanning'}
               </button>
             )}
           </div>
 
           {/* Divider */}
           <div className="scanner-divider">
-            <span>{t('admin.manufacturers.or')}</span>
+            <span>{t('admin.manufacturers.or') || 'or'}</span>
           </div>
 
           {/* File Upload */}
           <div className="scanner-section">
-            <h3>{t('admin.manufacturers.uploadImage')}</h3>
+            <h3>{t('admin.manufacturers.uploadImage') || 'Upload Image'}</h3>
             <input
+              ref={fileInputRef}
               type="file"
               accept="image/*"
               capture="environment"
               onChange={handleFileUpload}
               className="file-input"
+              style={isMobileDevice ? { display: 'none' } : {}}
             />
+            {isMobileDevice && (
+              <button 
+                onClick={() => fileInputRef.current?.click()} 
+                className="btn-secondary btn-scan"
+              >
+                🖼️ {t('admin.manufacturers.chooseFromGallery') || 'Choose from Gallery'}
+              </button>
+            )}
           </div>
 
           {/* Divider */}
