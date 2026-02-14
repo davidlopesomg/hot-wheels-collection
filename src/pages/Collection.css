@@ -181,6 +181,11 @@
   accent-color: #D42F41;
 }
 
+.brand-col {
+  width: 80px;
+  text-align: center;
+}
+
 .actions-col {
   width: 120px;
   text-align: center;
@@ -518,21 +523,28 @@
   border-bottom-color: var(--color-border);
 }
 
+.dark-mode table tbody tr:nth-child(even) {
+  background: var(--color-bg-tertiary) !important;
+}
+
 .dark-mode table tbody tr:hover {
-  background: var(--color-hover-bg);
-}
-
-.dark-mode table tbody tr.even {
-  background: var(--color-bg-tertiary);
-}
-
-.dark-mode table tbody tr.even:hover {
-  background: var(--color-hover-bg);
+  background: var(--color-hover-bg) !important;
+  box-shadow: inset 0 0 0 1px rgba(74, 159, 216, 0.3) !important;
 }
 
 .dark-mode table tbody td {
   color: var(--color-text);
   border-bottom-color: var(--color-border);
+}
+
+.dark-mode .results-count {
+  background: var(--color-bg-tertiary);
+  color: var(--color-text);
+  border-bottom-color: var(--color-border);
+}
+
+.dark-mode .result-count {
+  color: var(--color-text);
 }
 
 .dark-mode .edit-btn {

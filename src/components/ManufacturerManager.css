@@ -662,3 +662,58 @@
 .dark-mode .empty-message {
   color: var(--color-text-secondary);
 }
+
+.dark-mode .logo-search-container {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .logo-search-results {
+  background: var(--color-card-bg);
+  border-color: var(--color-secondary);
+}
+
+.dark-mode .results-header {
+  border-bottom-color: var(--color-border);
+}
+
+.dark-mode .results-header strong {
+  color: var(--color-text);
+}
+
+.dark-mode .btn-close {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .btn-close:hover {
+  background: var(--color-bg-tertiary);
+  color: var(--color-secondary);
+}
+
+.dark-mode .logo-result-card {
+  background: var(--color-bg-tertiary);
+  border-color: var(--color-border);
+}
+
+.dark-mode .logo-result-card:hover {
+  border-color: var(--color-secondary);
+  box-shadow: 0 2px 8px rgba(231, 76, 95, 0.3);
+}
+
+.dark-mode .logo-result-preview {
+  background: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+.dark-mode .logo-source {
+  color: var(--color-text-secondary);
+}
+
+.dark-mode .btn-secondary {
+  background: var(--color-primary);
+  color: white;
+}
+
+.dark-mode .btn-secondary:hover {
+  background: #3b8acc;
+}

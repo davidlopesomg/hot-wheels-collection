@@ -249,7 +249,7 @@ const Collection = () => {
                   onChange={handleSelectAll}
                 />
               </th>
-              <th onClick={() => handleSort('marca')}>
+              <th className="brand-col" onClick={() => handleSort('marca')}>
                 {t('collection.headers.brand')} {getSortIcon('marca')}
               </th>
               <th onClick={() => handleSort('modelo')}>
@@ -286,7 +286,7 @@ const Collection = () => {
                     onChange={() => handleSelectCar(car.id || '')}
                   />
                 </td>
-                <td><BrandIcon brandName={car.marca} size={40} /></td>
+                <td className="brand-col"><BrandIcon brandName={car.marca} size={40} /></td>
                 <td>{car.modelo}</td>
                 <td>{car.anoModelo}</td>
                 <td>{car.corPrincipal}</td>
