@@ -17,4 +17,5 @@ export interface CollectionStats {
   byManufacturer: Record<string, number>;
   byYear: Record<string, number>;
   byColor: Record<string, number>;
+  byModel: Record<string, number>;
 }

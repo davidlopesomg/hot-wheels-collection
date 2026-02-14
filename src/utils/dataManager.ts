@@ -1,7 +1,7 @@
 import Papa from 'papaparse';
 import { HotWheelsCar, CollectionStats } from '../types';
 import { db } from '../config/firebase';
-import { normalizeColorToEnglish } from '../constants/formOptions';
+import { normalizeColorToEnglish, MANUFACTURERS } from '../constants/formOptions';
 import { 
   collection, 
   getDocs, 
@@ -17,6 +17,76 @@ import {
 
 const STORAGE_KEY = 'hotwheels_collection';
 const COLLECTION_NAME = 'cars';
+
+interface CSVValidationError {
+  row: number;
+  field: string;
+  message: string;
+}
+
+export const validateCSVStructure = (file: File): Promise<{ valid: boolean; errors: CSVValidationError[] }> => {
+  return new Promise((resolve) => {
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      preview: 0, // Parse all rows for validation
+      complete: (results) => {
+        const errors: CSVValidationError[] = [];
+        const requiredColumns = ['Marca', 'Modelo', 'Código', 'Fabricante'];
+        
+        // Check if required columns exist
+        const headers = results.meta.fields || [];
+        const missingColumns = requiredColumns.filter(col => !headers.includes(col));
+        
+        if (missingColumns.length > 0) {
+          errors.push({
+            row: 0,
+            field: 'headers',
+            message: `Missing required columns: ${missingColumns.join(', ')}`
+          });
+          resolve({ valid: false, errors });
+          return;
+        }
+        
+        // Validate each row
+        results.data.forEach((row: any, index: number) => {
+          const rowNumber = index + 2; // +2 because CSV has header row and is 1-indexed
+          
+          // Check required fields
+          if (!row['Marca'] || row['Marca'].trim() === '') {
+            errors.push({ row: rowNumber, field: 'Marca', message: 'Brand is required' });
+          }
+          
+          if (!row['Modelo'] || row['Modelo'].trim() === '') {
+            errors.push({ row: rowNumber, field: 'Modelo', message: 'Model is required' });
+          }
+          
+          if (!row['Código'] || row['Código'].trim() === '') {
+            errors.push({ row: rowNumber, field: 'Código', message: 'Code is required' });
+          }
+          
+          // Validate manufacturer against known list
+          const fabricante = row['Fabricante'] || '';
+          if (fabricante && !MANUFACTURERS.includes(fabricante)) {
+            errors.push({ 
+              row: rowNumber, 
+              field: 'Fabricante', 
+              message: `Invalid manufacturer: "${fabricante}". Must be one of: ${MANUFACTURERS.slice(0, 5).join(', ')}...` 
+            });
+          }
+        });
+        
+        resolve({ valid: errors.length === 0, errors });
+      },
+      error: (error) => {
+        resolve({ 
+          valid: false, 
+          errors: [{ row: 0, field: 'file', message: `File parsing error: ${error.message}` }] 
+        });
+      }
+    });
+  });
+};
 
 export const parseCSV = (file: File): Promise<HotWheelsCar[]> => {
   return new Promise((resolve, reject) => {
@@ -139,7 +209,8 @@ export const calculateStats = (cars: HotWheelsCar[]): CollectionStats => {
     byBrand: {},
     byManufacturer: {},
     byYear: {},
-    byColor: {}
+    byColor: {},
+    byModel: {}
   };
 
   cars.forEach(car => {
@@ -157,6 +228,11 @@ export const calculateStats = (cars: HotWheelsCar[]): CollectionStats => {
     // By Primary Color
     if (car.corPrincipal) {
       stats.byColor[car.corPrincipal] = (stats.byColor[car.corPrincipal] || 0) + 1;
+    }
+
+    // By Model
+    if (car.modelo) {
+      stats.byModel[car.modelo] = (stats.byModel[car.modelo] || 0) + 1;
     }
   });
 

@@ -4,7 +4,8 @@ export const en = {
     brand: "Hot Wheels Collection",
     dashboard: "Dashboard",
     collection: "Collection",
-    scanner: "Scanner"
+    scanner: "Scanner",
+    admin: "Admin"
   },
   
   // Dashboard
@@ -13,11 +14,16 @@ export const en = {
     subtitle: "Hot Wheels collection statistics",
     totalCars: "Total Cars",
     differentBrands: "Different Brands",
+    differentModels: "Different Models",
     differentYears: "Different Years",
     differentColors: "Different Colours",
     topBrands: "Top 5 Brands",
+    topModels: "Top 5 Models",
     topColors: "Top 5 Colours",
     byManufacturer: "By Manufacturer",
+    colorDistribution: "Colour Distribution",
+    filterByManufacturer: "Filter by Manufacturer",
+    allManufacturers: "All Manufacturers",
     loading: "Loading..."
   },
   
@@ -30,6 +36,10 @@ export const en = {
     addCar: "Add Car",
     deleteSelected: "Delete Selected",
     resultsCount: "{{filtered}} of {{total}} cars",
+    upcBarcode: "UPC Barcode",
+    upcPlaceholder: "12-13 digit barcode",
+    scanUPC: "Scan UPC Barcode",
+    scanProductCode: "Scan Product Code with OCR",
     headers: {
       brand: "Brand",
       model: "Model",
@@ -71,7 +81,9 @@ export const en = {
     },
     alerts: {
       importSuccess: "{{count}} cars loaded successfully!",
-      importError: "Error loading CSV file"
+      importError: "Error loading CSV file",
+      validationError: "CSV Validation Failed",
+      deleteSuccess: "Successfully deleted {{count}} car(s)!"
     }
   },
   
@@ -148,6 +160,62 @@ export const en = {
       scanUpcFirst: "Scan UPC Barcode First",
       notFoundPrompt: "Not found? Let's scan the product code on the package",
       scanProductCode: "Scan Product Code"
+    }
+  },
+
+  // Footer
+  footer: {
+    supportedBrands: "Supported Brands",
+    more: "more",
+    developedBy: "Developed by",
+    withAssistance: "with the assistance of",
+    version: "Version"
+  },
+
+  // Admin
+  admin: {
+    title: "Administration",
+    subtitle: "Manage brands, manufacturers, colors, and data import",
+    comingSoon: "Coming Soon",
+    tabs: {
+      brands: "Brands",
+      manufacturers: "Manufacturers",
+      colors: "Colors",
+      import: "Import Data"
+    },
+    brands: {
+      title: "Brand Management",
+      description: "Add, edit, or remove brands from your collection. Upload brand logos and associate them with cars.",
+      comingSoonDetails: "Brand management interface is under development. You'll be able to manage brand logos and information here."
+    },
+    manufacturers: {
+      title: "Manufacturer Management",
+      description: "Manage manufacturers like Hot Wheels, Matchbox, Majorette, etc. Add logos and UPC prefixes.",
+      comingSoonDetails: "Manufacturer management interface is under development. You'll be able to manage manufacturer details and UPC prefixes here."
+    },
+    colors: {
+      title: "Color System Management",
+      description: "Manage the color system used in your collection. Add, edit, or remove colors and translations.",
+      comingSoonDetails: "Color management interface is under development. You'll be able to customize your color system here."
+    },
+    import: {
+      title: "Data Import",
+      description: "Import your collection from a CSV file. Download a template to get started.",
+      uploadCSV: "Upload CSV File",
+      uploadDescription: "Select a CSV file to import cars into your collection. The file will be validated before import.",
+      selectFile: "Select CSV File",
+      downloadTemplate: "Download Template",
+      templateDescription: "Download a CSV template with the correct format and example data.",
+      downloadButton: "Download Template.csv",
+      requiredColumns: "Required Columns",
+      brandColumn: "Car brand name (required)",
+      modelColumn: "Car model name (required)",
+      codeColumn: "Product code (required)",
+      manufacturerColumn: "Manufacturer name (must match from list)",
+      yearColumn: "Model year (optional)",
+      primaryColorColumn: "Primary color (optional)",
+      secondaryColorsColumn: "Secondary colors, comma-separated (optional)",
+      notesColumn: "Notes or theme (optional)"
     }
   }
 };

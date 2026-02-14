@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { loadCollection, sortCars, filterCars, parseCSV, saveCollection, addCar, updateCar, deleteCar, deleteCarsInBulk } from '../utils/dataManager';
+import { loadCollection, sortCars, filterCars, parseCSV, validateCSVStructure, saveCollection, addCar, updateCar, deleteCar, deleteCarsInBulk } from '../utils/dataManager';
 import { trackCSVImport } from '../utils/analytics';
 import { HotWheelsCar } from '../types';
 import AddCarForm from '../components/AddCarForm';
@@ -56,6 +56,22 @@ const Collection = () => {
     if (file) {
       setLoading(true);
       try {
+        // First validate the CSV structure
+        const validation = await validateCSVStructure(file);
+        
+        if (!validation.valid) {
+          const errorMessages = validation.errors.map(err => 
+            err.row === 0 
+              ? `${err.message}` 
+              : `Row ${err.row}, Field "${err.field}": ${err.message}`
+          ).join('\n');
+          
+          alert(`${t('collection.alerts.validationError')}\n\n${errorMessages}`);
+          setLoading(false);
+          return;
+        }
+        
+        // If valid, proceed with import
         const parsedCars = await parseCSV(file);
         await saveCollection(parsedCars);
         setCars(parsedCars);

@@ -1,0 +1,149 @@
+.app-footer {
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  color: white;
+  padding: 2rem 1rem;
+  margin-top: 4rem;
+  border-top: 4px solid #D42F41;
+}
+
+.footer-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.footer-section h3 {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  color: #D42F41;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.manufacturer-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.manufacturer-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.manufacturer-item:hover {
+  background: rgba(212, 47, 65, 0.2);
+  transform: translateY(-2px);
+}
+
+.manufacturer-icon {
+  font-size: 1.5rem;
+}
+
+.manufacturer-name {
+  font-size: 0.7rem;
+  color: #ccc;
+  white-space: nowrap;
+}
+
+.more-manufacturers {
+  color: #999;
+  font-size: 0.9rem;
+  font-style: italic;
+  padding: 0.5rem;
+}
+
+.credits {
+  text-align: center;
+}
+
+.developed-by {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.developed-by strong {
+  color: #2C84C7;
+}
+
+.copyright {
+  font-size: 0.85rem;
+  color: #999;
+  margin: 0;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.links a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.links a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #2C84C7;
+  transform: translateX(5px);
+}
+
+.link-icon {
+  font-size: 1.2rem;
+}
+
+@media (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .manufacturers {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-footer {
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    text-align: center;
+  }
+
+  .manufacturer-logos {
+    justify-content: center;
+  }
+
+  .links {
+    align-items: center;
+  }
+
+  .links a:hover {
+    transform: translateX(0) translateY(-2px);
+  }
+}

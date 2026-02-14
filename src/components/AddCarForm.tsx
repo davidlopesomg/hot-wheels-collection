@@ -3,6 +3,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { HotWheelsCar } from '../types';
 import { getUniqueBrands } from '../utils/dataManager';
 import { MANUFACTURERS, COLORS, getColorName, generateYearOptions } from '../constants/formOptions';
+import OCRScanner from './OCRScanner';
 import './AddCarForm.css';
 
 interface AddCarFormProps {
@@ -10,14 +11,17 @@ interface AddCarFormProps {
   scannedUPC?: string;
   onSave: (car: HotWheelsCar) => void;
   onCancel: () => void;
+  onScanUPC?: (upc: string) => void;
+  onScanCode?: (code: string) => void;
 }
 
-const AddCarForm = ({ scannedCode = '', scannedUPC = '', onSave, onCancel }: AddCarFormProps) => {
+const AddCarForm = ({ scannedCode = '', scannedUPC = '', onSave, onCancel, onScanUPC, onScanCode }: AddCarFormProps) => {
   const { t, language } = useLanguage();
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
   const [isAddingNewBrand, setIsAddingNewBrand] = useState(false);
   const [isAddingCustomColor, setIsAddingCustomColor] = useState(false);
   const [isAddingCustomSecondaryColor, setIsAddingCustomSecondaryColor] = useState(false);
+  const [showOCRScanner, setShowOCRScanner] = useState(false);
   const yearOptions = generateYearOptions();
   
   const [formData, setFormData] = useState<HotWheelsCar>({
@@ -78,8 +82,23 @@ const AddCarForm = ({ scannedCode = '', scannedUPC = '', onSave, onCancel }: Add
     onSave(formData);
   };
 
+  const handleOCRResult = (code: string) => {
+    handleChange('codigo', code);
+    setShowOCRScanner(false);
+    if (onScanCode) {
+      onScanCode(code);
+    }
+  };
+
   return (
     <div className="add-car-overlay">
+      {showOCRScanner && (
+        <OCRScanner
+          onCodeDetected={handleOCRResult}
+          onCancel={() => setShowOCRScanner(false)}
+        />
+      )}
+      
       <div className="add-car-form">
         <div className="form-header">
           <h2>{scannedCode ? t('scanner.addCar.titleScanned') : t('scanner.addCar.title')}</h2>
@@ -236,16 +255,47 @@ const AddCarForm = ({ scannedCode = '', scannedUPC = '', onSave, onCancel }: Add
               )}
             </div>
 
-            {/* Code Field */}
+            {/* Code Field with OCR Scanner */}
             <div className="form-field">
               <label>{t('collection.headers.code')} *</label>
-              <input
-                type="text"
-                value={formData.codigo}
-                onChange={(e) => handleChange('codigo', e.target.value)}
-                placeholder={t('scanner.addCar.placeholders.code')}
-                required
-              />
+              <div className="input-with-scanner-btn">
+                <input
+                  type="text"
+                  value={formData.codigo}
+                  onChange={(e) => handleChange('codigo', e.target.value)}
+                  placeholder={t('scanner.addCar.placeholders.code')}
+                  required
+                />
+                <button
+                  type="button"
+                  className="btn-scanner-icon"
+                  onClick={() => setShowOCRScanner(true)}
+                  title={t('collection.scanProductCode')}
+                >
+                  📷 OCR
+                </button>
+              </div>
+            </div>
+
+            {/* UPC Field with Barcode Scanner */}
+            <div className="form-field">
+              <label>{t('collection.upcBarcode')}</label>
+              <div className="input-with-scanner-btn">
+                <input
+                  type="text"
+                  value={formData.upc || ''}
+                  onChange={(e) => handleChange('upc', e.target.value)}
+                  placeholder={t('collection.upcPlaceholder')}
+                />
+                <button
+                  type="button"
+                  className="btn-scanner-icon"
+                  onClick={() => onScanUPC && onScanUPC(formData.upc || '')}
+                  title={t('collection.scanUPC')}
+                >
+                  📷 UPC
+                </button>
+              </div>
             </div>
 
             {/* Manufacturer Field */}

@@ -23,7 +23,6 @@ const Navigation = () => {
           />
           <span className="nav-brand-text">{t('nav.brand')}</span>
         </div>
-        <LanguageSwitcher />
         <div className="nav-links">
           <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
             <span className="nav-icon">📊</span>
@@ -37,7 +36,12 @@ const Navigation = () => {
             <span className="nav-icon">📷</span>
             <span>{t('nav.scanner')}</span>
           </NavLink>
+          <NavLink to="/admin" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+            <span className="nav-icon">⚙️</span>
+            <span>{t('nav.admin')}</span>
+          </NavLink>
         </div>
+        <LanguageSwitcher />
       </div>
     </nav>
   );

@@ -1,23 +1,29 @@
 export const pt = {
   // Navigation
   nav: {
-    brand: "Colecção Hot Wheels",
-    dashboard: "Painel",
-    collection: "Colecção",
-    scanner: "Scanner"
+    brand: "Coleção Hot Wheels",
+    dashboard: "Painel de Controlo",
+    collection: "Coleção",
+    scanner: "Ler Código",
+    admin: "Admin"
   },
   
   // Dashboard
   dashboard: {
-    title: "A Minha Colecção",
-    subtitle: "Estatísticas da colecção Hot Wheels",
+    title: "Minha Coleção",
+    subtitle: "Estatísticas da coleção Hot Wheels",
     totalCars: "Total de Carros",
     differentBrands: "Marcas Diferentes",
+    differentModels: "Modelos Diferentes",
     differentYears: "Anos Diferentes",
     differentColors: "Cores Diferentes",
     topBrands: "Top 5 Marcas",
+    topModels: "Top 5 Modelos",
     topColors: "Top 5 Cores",
     byManufacturer: "Por Fabricante",
+    colorDistribution: "Distribuição de Cores",
+    filterByManufacturer: "Filtrar por Fabricante",
+    allManufacturers: "Todos os Fabricantes",
     loading: "A carregar..."
   },
   
@@ -30,6 +36,10 @@ export const pt = {
     addCar: "Adicionar Carro",
     deleteSelected: "Eliminar Selecionados",
     resultsCount: "{{filtered}} de {{total}} carros",
+    upcBarcode: "Código de Barras UPC",
+    upcPlaceholder: "Código de barras de 12-13 dígitos",
+    scanUPC: "Digitalizar Código de Barras UPC",
+    scanProductCode: "Digitalizar Código do Produto com OCR",
     headers: {
       brand: "Marca",
       model: "Modelo",
@@ -71,7 +81,9 @@ export const pt = {
     },
     alerts: {
       importSuccess: "{{count}} carros carregados com sucesso!",
-      importError: "Erro ao carregar o ficheiro CSV"
+      importError: "Erro ao carregar o ficheiro CSV",
+      validationError: "Falha na Validação do CSV",
+      deleteSuccess: "{{count}} carro(s) eliminado(s) com sucesso!"
     }
   },
   
@@ -146,6 +158,63 @@ export const pt = {
       manualEntry: "Ou introduza o código manualmente:",
       scanUpcFirst: "Digitalize o Código de Barras UPC Primeiro",
       notFoundPrompt: "Não encontrado? Vamos digitalizar o código do produto na embalagem",
-      scanProductCode: "Digitalizar Código do Produto"    }
+      scanProductCode: "Digitalizar Código do Produto"
+    }
+  },
+
+  // Footer
+  footer: {
+    supportedBrands: "Marcas Suportadas",
+    more: "mais",
+    developedBy: "Desenvolvido por",
+    withAssistance: "com a assistência de",
+    version: "Versão"
+  },
+
+  // Admin
+  admin: {
+    title: "Administração",
+    subtitle: "Gerir marcas, fabricantes, cores e importação de dados",
+    comingSoon: "Brevemente",
+    tabs: {
+      brands: "Marcas",
+      manufacturers: "Fabricantes",
+      colors: "Cores",
+      import: "Importar Dados"
+    },
+    brands: {
+      title: "Gestão de Marcas",
+      description: "Adicionar, editar ou remover marcas da sua coleção. Carregar logótipos de marcas e associá-los a carros.",
+      comingSoonDetails: "A interface de gestão de marcas está em desenvolvimento. Poderá gerir logótipos e informações de marcas aqui."
+    },
+    manufacturers: {
+      title: "Gestão de Fabricantes",
+      description: "Gerir fabricantes como Hot Wheels, Matchbox, Majorette, etc. Adicionar logótipos e prefixos UPC.",
+      comingSoonDetails: "A interface de gestão de fabricantes está em desenvolvimento. Poderá gerir detalhes de fabricantes e prefixos UPC aqui."
+    },
+    colors: {
+      title: "Gestão do Sistema de Cores",
+      description: "Gerir o sistema de cores usado na sua coleção. Adicionar, editar ou remover cores e traduções.",
+      comingSoonDetails: "A interface de gestão de cores está em desenvolvimento. Poderá personalizar o seu sistema de cores aqui."
+    },
+    import: {
+      title: "Importação de Dados",
+      description: "Importe a sua coleção a partir de um ficheiro CSV. Descarregue um modelo para começar.",
+      uploadCSV: "Carregar Ficheiro CSV",
+      uploadDescription: "Selecione um ficheiro CSV para importar carros para a sua coleção. O ficheiro será validado antes da importação.",
+      selectFile: "Selecionar Ficheiro CSV",
+      downloadTemplate: "Descarregar Modelo",
+      templateDescription: "Descarregue um modelo CSV com o formato correto e dados de exemplo.",
+      downloadButton: "Descarregar Template.csv",
+      requiredColumns: "Colunas Necessárias",
+      brandColumn: "Nome da marca do carro (obrigatório)",
+      modelColumn: "Nome do modelo do carro (obrigatório)",
+      codeColumn: "Código do produto (obrigatório)",
+      manufacturerColumn: "Nome do fabricante (deve corresponder à lista)",
+      yearColumn: "Ano do modelo (opcional)",
+      primaryColorColumn: "Cor principal (opcional)",
+      secondaryColorsColumn: "Cores secundárias, separadas por vírgula (opcional)",
+      notesColumn: "Notas ou tema (opcional)"
+    }
   }
 };
