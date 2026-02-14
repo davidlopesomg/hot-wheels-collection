@@ -1,6 +1,8 @@
 /**
  * Utility functions for parsing Hot Wheels base codes
  * 
+ * Base code location: Back of packaging at the top
+ * 
  * Base code format:
  * - Top line: SERIES-COLLECTOR_NUMBER (e.g., "JJJ26-N521")
  * - Bottom line: PRODUCTION_YEAR + FACTORY_CODE (e.g., "21A")

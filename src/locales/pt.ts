@@ -91,7 +91,7 @@ export const pt = {
   // Scanner
   scanner: {
     title: "Escanear Código Base",
-    subtitle: "Escaneie o código base no carro para verificar se já o tem",
+    subtitle: "Escaneie o código base na traseira da embalagem para verificar se já o tem",
     startScanner: "Iniciar Scanner",
     cancel: "Cancelar",
     manualInput: "ou digite o código base manualmente:",
@@ -152,9 +152,9 @@ export const pt = {
       search: "Erro ao pesquisar na colecção"    },
     ocr: {
       title: "Escanear Código Base",
-      instruction: "Escaneie o código base no fundo do carro",
+      instruction: "Escaneie o código base na traseira da embalagem (topo)",
       scanButton: "Escanear Código Base (OCR)",
-      instructions: "Fotografe o código base no fundo do carro (ex: JJJ26-N521 21A)",
+      instructions: "Fotografe o código base na traseira da embalagem no topo (ex: JJJ26-N521 21A)",
       useCamera: "Usar Câmara",
       uploadImage: "Carregar Imagem",
       alignCode: "Alinhe o código base na moldura",
