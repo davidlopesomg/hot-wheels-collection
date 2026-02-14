@@ -11,10 +11,11 @@ const Navigation = () => {
       <div className="nav-container">
         <div className="nav-brand">
           <img 
-            src="/assets/img/hot-wheels-logo.svg" 
+            src="/assets/img/hot-wheels-text-logo.svg" 
             alt="Hot Wheels" 
             className="nav-logo"
             onError={(e) => {
+              console.error('Logo failed to load from:', e.currentTarget.src);
               e.currentTarget.style.display = 'none';
               const text = e.currentTarget.nextElementSibling;
               if (text) (text as HTMLElement).style.display = 'block';

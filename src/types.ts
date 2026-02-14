@@ -1,4 +1,5 @@
 export interface HotWheelsCar {
+  id?: string;             // Firestore document ID
   marca: string;           // Brand
   modelo: string;          // Model
   anoModelo: string;       // Model Year

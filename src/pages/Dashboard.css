@@ -12,7 +12,7 @@
 .dashboard-header h1 {
   font-size: 2rem;
   margin-bottom: 0.5rem;
-  color: #e63946;
+  color: #D42F41;
 }
 
 .subtitle {
@@ -42,8 +42,12 @@
 }
 
 .stat-card.total {
-  background: linear-gradient(135deg, #e63946 0%, #ff758c 100%);
+  background: linear-gradient(135deg, #D42F41 0%, #2C84C7 100%);
   color: white;
+}
+
+.stat-card.total .stat-value {
+  color: #F1D74D;
 }
 
 .stat-value {
@@ -105,7 +109,7 @@
 }
 
 .chart-bar {
-  background: linear-gradient(90deg, #e63946 0%, #ff758c 100%);
+  background: linear-gradient(90deg, #D42F41 0%, #2C84C7 100%);
   height: 100%;
   border-radius: 4px;
   transition: width 0.3s ease;
@@ -113,7 +117,7 @@
 
 .chart-value {
   font-weight: bold;
-  color: #e63946;
+  color: #D42F41;
   text-align: right;
 }
 
@@ -144,4 +148,27 @@
   .stat-value {
     font-size: 2rem;
   }
+}
+
+.dashboard.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 4rem 2rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(212, 47, 65, 0.1);
+  border-top-color: #D42F41;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }

@@ -7,15 +7,31 @@ import './Dashboard.css';
 const Dashboard = () => {
   const { t } = useLanguage();
   const [stats, setStats] = useState<CollectionStats | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const cars = loadCollection();
-    const calculatedStats = calculateStats(cars);
-    setStats(calculatedStats);
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const cars = await loadCollection();
+        const calculatedStats = calculateStats(cars);
+        setStats(calculatedStats);
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, []);
 
-  if (!stats) {
-    return <div className="dashboard loading">{t('dashboard.loading')}</div>;
+  if (loading || !stats) {
+    return (
+      <div className="dashboard loading">
+        <div className="spinner"></div>
+        <p>{t('dashboard.loading')}</p>
+      </div>
+    );
   }
 
   const topBrands = Object.entries(stats.byBrand)

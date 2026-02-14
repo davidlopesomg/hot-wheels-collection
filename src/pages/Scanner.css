@@ -11,7 +11,7 @@
 
 .scanner-header h1 {
   font-size: 2rem;
-  color: #e63946;
+  color: #D42F41;
   margin-bottom: 0.5rem;
 }
 
@@ -30,7 +30,7 @@
 }
 
 #qr-reader.active {
-  box-shadow: 0 4px 16px rgba(230, 57, 70, 0.3);
+  box-shadow: 0 4px 16px rgba(212, 47, 65, 0.3);
 }
 
 .scanner-controls {
@@ -53,14 +53,14 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #e63946 0%, #ff758c 100%);
+  background: linear-gradient(135deg, #D42F41 0%, #2C84C7 100%);
   color: white;
-  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.3);
+  box-shadow: 0 4px 12px rgba(212, 47, 65, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(230, 57, 70, 0.4);
+  box-shadow: 0 6px 16px rgba(212, 47, 65, 0.4);
 }
 
 .btn-secondary {
@@ -97,22 +97,24 @@
 
 .input-group input:focus {
   outline: none;
-  border-color: #e63946;
+  border-color: #D42F41;
 }
 
 .input-group button {
   padding: 0.75rem 1.5rem;
-  background: #e63946;
+  background: linear-gradient(135deg, #D42F41 0%, #2C84C7 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.2s;
+  box-shadow: 0 2px 8px rgba(212, 47, 65, 0.3);
 }
 
 .input-group button:hover {
-  background: #d62839;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 47, 65, 0.4);
 }
 
 .alert {
@@ -200,6 +202,79 @@
   text-align: right;
 }
 
+.add-manual-section {
+  width: 100%;
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 2px solid #e9ecef;
+}
+
+.add-manual-section p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.btn-add-manual {
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid #D42F41;
+  background: white;
+  color: #D42F41;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 200px;
+}
+
+.btn-add-manual:hover {
+  background: #D42F41;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(212, 47, 65, 0.3);
+}
+
+.scanned-info {
+  background: #e7f3ff;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+  color: #2C84C7;
+}
+
+.scanned-info strong {
+  font-family: 'Courier New', monospace;
+  font-size: 1.1rem;
+  color: #4251AE;
+}
+
+.not-found-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.btn-add {
+  padding: 0.875rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  background: #28a745;
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-add:hover {
+  background: #218838;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+}
+
 @media (max-width: 768px) {
   .scanner {
     padding: 0.5rem;
@@ -233,5 +308,13 @@
 
   .detail-row .value {
     text-align: left;
+  }
+
+  .not-found-actions {
+    flex-direction: column;
+  }
+
+  .btn-add, .btn-add-manual {
+    width: 100%;
   }
 }

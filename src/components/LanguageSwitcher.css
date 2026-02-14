@@ -24,8 +24,10 @@
 }
 
 .lang-btn.active {
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #F1D74D;
+  color: #2C84C7;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  font-weight: 700;
 }
 
 @media (max-width: 768px) {

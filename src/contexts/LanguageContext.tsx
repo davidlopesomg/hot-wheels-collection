@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { translations, Language, TranslationKeys, getNestedTranslation, interpolate } from '../locales';
+import { trackLanguageChange } from '../utils/analytics';
 
 interface LanguageContextType {
   language: Language;
@@ -29,6 +30,7 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
+    trackLanguageChange(lang);
   };
 
   const t = (key: string, values?: Record<string, any>): string => {

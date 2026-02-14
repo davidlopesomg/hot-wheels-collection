@@ -1,6 +1,6 @@
 # 🏎️ Hot Wheels Collection Manager
 
-A modern, mobile-first web application for managing your Hot Wheels car collection. Built with React, TypeScript, and Vite.
+A modern, mobile-first web application for managing your Hot Wheels car collection. Built with React, TypeScript, Vite, and Firebase Firestore.
 
 ## ✨ Features
 
@@ -9,14 +9,17 @@ A modern, mobile-first web application for managing your Hot Wheels car collecti
 - **📊 Statistics Dashboard** - Track collection stats with visual charts
 - **🌐 Bilingual Interface** - Switch between English and Portuguese (Portugal)
 - **📱 Mobile-First Design** - Optimized for smartphones with full desktop support
-- **💾 Local Storage** - Your data stays on your device
+- **☁️ Cloud Sync** - Your collection syncs across all your devices via Firebase Firestore
+- **💾 Offline-First** - Works offline with automatic cloud sync when online
 - **📂 CSV Import/Export** - Easy data management
+- **📈 Google Analytics** - Optional tracking for page views, imports, and scans
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
 - Node.js 18+ and npm
+- Firebase account (free tier) for cloud sync
 
 ### Installation
 
@@ -31,15 +34,32 @@ cd hot-wheels-collection
 npm install
 ```
 
-3. Add your Hot Wheels logo:
-   - Place your logo SVG in `public/assets/img/hot-wheels-logo.svg`
+3. **Set up Firebase Firestore** (for cloud sync):
+   - Follow the complete guide: [FIREBASE_SETUP.md](FIREBASE_SETUP.md)
+   - Create a `.env` file with your Firebase credentials
+   - This enables cross-device sync for your collection
 
-4. Start the development server:
+4. Add your Hot Wheels logo:
+   - Place your logo SVG in `public/assets/img/hot-wheels-app-icon.svg` (for favicon and mobile app icon)
+   - Place your text logo SVG in `public/assets/img/hot-wheels-text-logo.svg` (for navigation)
+
+5. Start the development server:
 ```bash
 npm run dev
 ```
 
-5. Open your browser to `http://localhost:5173`
+6. Open your browser to `http://localhost:5173`
+
+## ☁️ Firebase Firestore Integration
+
+This app uses Firebase Firestore for cloud storage and cross-device sync:
+
+- **Automatic sync**: Changes on one device appear on all your devices
+- **Offline-first**: Works without internet, syncs when back online
+- **Free tier**: More than enough for personal collections
+- **Secure**: Data stored in your own Firebase project
+
+See [FIREBASE_SETUP.md](FIREBASE_SETUP.md) for complete setup instructions.
 
 ## 📦 Building for Production
 

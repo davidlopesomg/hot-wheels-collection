@@ -1,8 +1,10 @@
 import { useEffect, useState, useRef } from 'react';
 import { Html5Qrcode } from 'html5-qrcode';
 import { useLanguage } from '../contexts/LanguageContext';
-import { loadCollection, searchCar } from '../utils/dataManager';
+import { loadCollection, searchCar, addCar } from '../utils/dataManager';
+import { trackBarcodeScan, trackCarAdd } from '../utils/analytics';
 import { HotWheelsCar } from '../types';
+import AddCarForm from '../components/AddCarForm';
 import './Scanner.css';
 
 const Scanner = () => {
@@ -10,9 +12,12 @@ const Scanner = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [result, setResult] = useState<HotWheelsCar | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [scannedCode, setScannedCode] = useState('');
   const [error, setError] = useState<string>('');
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const [manualCode, setManualCode] = useState('');
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [addFormCode, setAddFormCode] = useState('');
 
   const startScanner = async () => {
     try {
@@ -53,22 +58,67 @@ const Scanner = () => {
     setIsScanning(false);
   };
 
-  const handleScanResult = (code: string) => {
-    const cars = loadCollection();
-    const found = searchCar(cars, code);
+  const handleScanResult = async (code: string) => {
+    try {
+      const cars = await loadCollection();
+      const found = searchCar(cars, code);
 
-    if (found) {
-      setResult(found);
-      setNotFound(false);
-    } else {
-      setResult(null);
-      setNotFound(true);
+      if (found) {
+        setResult(found);
+        setNotFound(false);
+        setScannedCode('');
+        trackBarcodeScan(true);
+      } else {
+        setResult(null);
+        setNotFound(true);
+        setScannedCode(code);
+        trackBarcodeScan(false);
+      }
+
+      stopScanner();
+    } catch (error) {
+      console.error('Error searching for car:', error);
+      setError(t('scanner.errors.search') || 'Error searching collection');
     }
-
-    stopScanner();
   };
 
-  const handleManualSearch = () => {
+  const handleAddCar = async (car: HotWheelsCar) => {
+    try {
+      await addCar(car);
+      // Track if added from scan or manual entry
+      const method = scannedCode ? 'scan' : 'manual';
+      trackCarAdd(method);
+      setShowAddForm(false);
+      setNotFound(false);
+      setScannedCode('');
+      setAddFormCode('');
+      setManualCode('');
+      // Show success message
+      alert(t('scanner.addCar.success'));
+    } catch (error) {
+      console.error('Error adding car:', error);
+      alert(t('scanner.addCar.error'));
+    }
+  };
+
+  const openAddForm = (code: string = '') => {
+    setAddFormCode(code);
+    setShowAddForm(true);
+  };
+
+  const closeAddForm = () => {
+    setShowAddForm(false);
+    setAddFormCode('');
+  };
+
+  const resetScanner = () => {
+    setResult(null);
+    setNotFound(false);
+    setScannedCode('');
+    setManualCode('');
+  };
+
+  const handleManualSearch = () =>{
     if (!manualCode.trim()) return;
     handleScanResult(manualCode);
   };
@@ -107,6 +157,13 @@ const Scanner = () => {
                 />
                 <button onClick={handleManualSearch}>{t('scanner.search')}</button>
               </div>
+            </div>
+
+            <div className="add-manual-section">
+              <p>{t('scanner.addManual.text')}</p>
+              <button onClick={() => openAddForm()} className="btn-add-manual">
+                ➕ {t('scanner.addManual.button')}
+              </button>
             </div>
           </div>
         )}
@@ -161,7 +218,7 @@ const Scanner = () => {
                 </div>
               )}
             </div>
-            <button onClick={() => { setResult(null); setManualCode(''); }} className="btn-primary">
+            <button onClick={resetScanner} className="btn-primary">
               {t('scanner.scanAnother')}
             </button>
           </div>
@@ -171,13 +228,31 @@ const Scanner = () => {
           <div className="result-card not-found">
             <div className="result-icon">✗</div>
             <h2>{t('scanner.notFound.title')}</h2>
+            {scannedCode && (
+              <p className="scanned-info">
+                {t('scanner.notFound.scannedCode')}: <strong>{scannedCode}</strong>
+              </p>
+            )}
             <p>{t('scanner.notFound.message')}</p>
-            <button onClick={() => { setNotFound(false); setManualCode(''); }} className="btn-primary">
-              {t('scanner.scanAnother')}
-            </button>
+            <div className="not-found-actions">
+              <button onClick={() => openAddForm(scannedCode)} className="btn-add">
+                ➕ {t('scanner.notFound.addButton')}
+              </button>
+              <button onClick={resetScanner} className="btn-secondary">
+                {t('scanner.scanAnother')}
+              </button>
+            </div>
           </div>
         )}
       </div>
+
+      {showAddForm && (
+        <AddCarForm
+          scannedCode={addFormCode}
+          onSave={handleAddCar}
+          onCancel={closeAddForm}
+        />
+      )}
     </div>
   );
 };

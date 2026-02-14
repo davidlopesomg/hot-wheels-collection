@@ -1,7 +1,22 @@
 import Papa from 'papaparse';
 import { HotWheelsCar, CollectionStats } from '../types';
+import { db } from '../config/firebase';
+import { normalizeColorToEnglish } from '../constants/formOptions';
+import { 
+  collection, 
+  getDocs, 
+  doc,
+  writeBatch,
+  query,
+  orderBy,
+  QueryDocumentSnapshot,
+  addDoc,
+  updateDoc,
+  deleteDoc
+} from 'firebase/firestore';
 
 const STORAGE_KEY = 'hotwheels_collection';
+const COLLECTION_NAME = 'cars';
 
 export const parseCSV = (file: File): Promise<HotWheelsCar[]> => {
   return new Promise((resolve, reject) => {
@@ -9,16 +24,23 @@ export const parseCSV = (file: File): Promise<HotWheelsCar[]> => {
       header: true,
       skipEmptyLines: true,
       complete: (results) => {
-        const cars: HotWheelsCar[] = results.data.map((row: any) => ({
-          marca: row['Marca'] || '',
-          modelo: row['Modelo'] || '',
-          anoModelo: row['Ano do Modelo'] || '',
-          corPrincipal: row['Cor Principal'] || '',
-          coresSecundarias: row['Cor(es) Segundária(s)'] || '',
-          codigo: row['Código'] || '',
-          fabricante: row['Fabricante'] || '',
-          notasTema: row['Notas/Tema'] || ''
-        }));
+        const cars: HotWheelsCar[] = results.data.map((row: any) => {
+          const primaryColor = row['Cor Principal'] || '';
+          const secondaryColors = row['Cor(es) Segundária(s)'] || '';
+          
+          return {
+            marca: row['Marca'] || '',
+            modelo: row['Modelo'] || '',
+            anoModelo: row['Ano do Modelo'] || '',
+            corPrincipal: normalizeColorToEnglish(primaryColor),
+            coresSecundarias: secondaryColors ? 
+              secondaryColors.split(',').map((c: string) => normalizeColorToEnglish(c.trim())).join(', ') : 
+              '',
+            codigo: row['Código'] || '',
+            fabricante: row['Fabricante'] || '',
+            notasTema: row['Notas/Tema'] || ''
+          };
+        });
         resolve(cars);
       },
       error: (error) => {
@@ -28,20 +50,76 @@ export const parseCSV = (file: File): Promise<HotWheelsCar[]> => {
   });
 };
 
-export const saveCollection = (cars: HotWheelsCar[]): void => {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cars));
+export const saveCollection = async (cars: HotWheelsCar[]): Promise<void> => {
+  try {
+    // Save to Firestore
+    const batch = writeBatch(db);
+    const collectionRef = collection(db, COLLECTION_NAME);
+    
+    // Clear existing data and add new
+    const existingDocs = await getDocs(collectionRef);
+    existingDocs.forEach((docSnapshot: QueryDocumentSnapshot) => {
+      batch.delete(docSnapshot.ref);
+    });
+    
+    // Add new cars
+    for (const car of cars) {
+      const docRef = doc(collectionRef);
+      batch.set(docRef, car);
+    }
+    
+    await batch.commit();
+    
+    // Also save to localStorage as backup
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cars));
+  } catch (error) {
+    console.error('Error saving to Firestore, using localStorage:', error);
+    // Fallback to localStorage if Firestore fails
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cars));
+  }
 };
 
-export const loadCollection = (): HotWheelsCar[] => {
-  const stored = localStorage.getItem(STORAGE_KEY);
-  if (stored) {
-    try {
-      return JSON.parse(stored);
-    } catch {
-      return [];
+export const loadCollection = async (): Promise<HotWheelsCar[]> => {
+  try {
+    // Try loading from Firestore first
+    const collectionRef = collection(db, COLLECTION_NAME);
+    const q = query(collectionRef, orderBy('marca'));
+    const querySnapshot = await getDocs(q);
+    
+    const cars: HotWheelsCar[] = [];
+    querySnapshot.forEach((docSnapshot: QueryDocumentSnapshot) => {
+      cars.push({ 
+        id: docSnapshot.id,
+        ...docSnapshot.data() 
+      } as HotWheelsCar);
+    });
+    
+    // If we got data from Firestore, also save to localStorage as cache
+    if (cars.length > 0) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(cars));
+      return cars;
     }
+    
+    // If Firestore is empty, try localStorage
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    
+    return [];
+  } catch (error) {
+    console.error('Error loading from Firestore, using localStorage:', error);
+    // Fallback to localStorage if Firestore fails
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch {
+        return [];
+      }
+    }
+    return [];
   }
-  return [];
 };
 
 export const searchCar = (cars: HotWheelsCar[], query: string): HotWheelsCar | null => {
@@ -90,8 +168,8 @@ export const sortCars = (
   direction: 'asc' | 'desc'
 ): HotWheelsCar[] => {
   return [...cars].sort((a, b) => {
-    const aVal = a[field].toLowerCase();
-    const bVal = b[field].toLowerCase();
+    const aVal = (a[field] || '').toString().toLowerCase();
+    const bVal = (b[field] || '').toString().toLowerCase();
     if (direction === 'asc') {
       return aVal.localeCompare(bVal);
     }
@@ -111,4 +189,111 @@ export const filterCars = (cars: HotWheelsCar[], searchTerm: string): HotWheelsC
     car.corPrincipal.toLowerCase().includes(lowerSearch) ||
     car.notasTema.toLowerCase().includes(lowerSearch)
   );
+};
+
+export const addCar = async (car: HotWheelsCar): Promise<void> => {
+  try {
+    // Add to Firestore
+    const collectionRef = collection(db, COLLECTION_NAME);
+    await addDoc(collectionRef, car);
+    
+    // Update localStorage cache
+    const existingCars = await loadCollection();
+    existingCars.push(car);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(existingCars));
+  } catch (error) {
+    console.error('Error adding car to Firestore, using localStorage:', error);
+    // Fallback to localStorage if Firestore fails
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const cars: HotWheelsCar[] = stored ? JSON.parse(stored) : [];
+    cars.push(car);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cars));
+  }
+};
+
+export const getUniqueBrands = async (): Promise<string[]> => {
+  try {
+    const cars = await loadCollection();
+    const brands = new Set<string>();
+    cars.forEach(car => {
+      if (car.marca && car.marca.trim()) {
+        brands.add(car.marca);
+      }
+    });
+    return Array.from(brands).sort();
+  } catch (error) {
+    console.error('Error loading brands:', error);
+    return [];
+  }
+};
+
+export const updateCar = async (carId: string, updatedCar: HotWheelsCar): Promise<void> => {
+  try {
+    // Remove the id field from the data to update
+    const { id, ...carData } = updatedCar;
+    
+    // Update in Firestore
+    const carRef = doc(db, COLLECTION_NAME, carId);
+    await updateDoc(carRef, carData);
+    
+    // Update localStorage cache
+    const existingCars = await loadCollection();
+    const updatedCars = existingCars.map(car => 
+      car.id === carId ? { ...updatedCar, id: carId } : car
+    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCars));
+  } catch (error) {
+    console.error('Error updating car in Firestore, using localStorage:', error);
+    // Fallback to localStorage if Firestore fails
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const cars: HotWheelsCar[] = stored ? JSON.parse(stored) : [];
+    const updatedCars = cars.map(car => 
+      car.id === carId ? { ...updatedCar, id: carId } : car
+    );
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCars));
+  }
+};
+
+export const deleteCar = async (carId: string): Promise<void> => {
+  try {
+    // Delete from Firestore
+    const carRef = doc(db, COLLECTION_NAME, carId);
+    await deleteDoc(carRef);
+    
+    // Update localStorage cache
+    const existingCars = await loadCollection();
+    const updatedCars = existingCars.filter(car => car.id !== carId);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCars));
+  } catch (error) {
+    console.error('Error deleting car from Firestore, using localStorage:', error);
+    // Fallback to localStorage if Firestore fails
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const cars: HotWheelsCar[] = stored ? JSON.parse(stored) : [];
+    const updatedCars = cars.filter(car => car.id !== carId);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCars));
+  }
+};
+
+export const deleteCarsInBulk = async (carIds: string[]): Promise<void> => {
+  try {
+    // Delete from Firestore using batch
+    const batch = writeBatch(db);
+    carIds.forEach(carId => {
+      const carRef = doc(db, COLLECTION_NAME, carId);
+      batch.delete(carRef);
+    });
+    await batch.commit();
+    
+    // Update localStorage cache
+    const existingCars = await loadCollection();
+    const updatedCars = existingCars.filter(car => !carIds.includes(car.id || ''));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCars));
+  } catch (error) {
+    console.error('Error deleting cars from Firestore, using localStorage:', error);
+    // Fallback to localStorage if Firestore fails
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const cars: HotWheelsCar[] = stored ? JSON.parse(stored) : [];
+    const updatedCars = cars.filter(car => !carIds.includes(car.id || ''));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedCars));
+  }
 };

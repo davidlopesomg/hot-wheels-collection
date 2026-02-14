@@ -1,5 +1,5 @@
 .navigation {
-  background: linear-gradient(135deg, #e63946 0%, #ff758c 100%);
+  background: linear-gradient(135deg, #2C84C7 0%, #4251AE 100%);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 0;
@@ -26,6 +26,7 @@
 .nav-logo {
   height: 40px;
   width: auto;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .nav-brand-text {

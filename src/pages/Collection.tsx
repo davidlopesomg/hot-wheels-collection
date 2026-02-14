@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { loadCollection, sortCars, filterCars, parseCSV, saveCollection } from '../utils/dataManager';
+import { loadCollection, sortCars, filterCars, parseCSV, saveCollection, addCar, updateCar, deleteCar, deleteCarsInBulk } from '../utils/dataManager';
+import { trackCSVImport } from '../utils/analytics';
 import { HotWheelsCar } from '../types';
+import AddCarForm from '../components/AddCarForm';
+import EditCarForm from '../components/EditCarForm';
 import './Collection.css';
 
 const Collection = () => {
@@ -11,11 +14,26 @@ const Collection = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState<keyof HotWheelsCar>('marca');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [loading, setLoading] = useState(true);
+  const [selectedCarIds, setSelectedCarIds] = useState<string[]>([]);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [carToEdit, setCarToEdit] = useState<HotWheelsCar | null>(null);
 
   useEffect(() => {
-    const loadedCars = loadCollection();
-    setCars(loadedCars);
-    setFilteredCars(loadedCars);
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const loadedCars = await loadCollection();
+        setCars(loadedCars);
+        setFilteredCars(loadedCars);
+      } catch (error) {
+        console.error('Error loading collection:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -36,15 +54,118 @@ const Collection = () => {
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      setLoading(true);
       try {
         const parsedCars = await parseCSV(file);
+        await saveCollection(parsedCars);
         setCars(parsedCars);
-        saveCollection(parsedCars);
+        trackCSVImport(parsedCars.length);
         alert(t('collection.alerts.importSuccess', { count: parsedCars.length }));
       } catch (error) {
         alert(t('collection.alerts.importError'));
         console.error(error);
+      } finally {
+        setLoading(false);
       }
+    }
+  };
+
+  const handleSelectAll = () => {
+    if (selectedCarIds.length === filteredCars.length) {
+      setSelectedCarIds([]);
+    } else {
+      setSelectedCarIds(filteredCars.map(car => car.id || '').filter(id => id));
+    }
+  };
+
+  const handleSelectCar = (carId: string) => {
+    if (selectedCarIds.includes(carId)) {
+      setSelectedCarIds(selectedCarIds.filter(id => id !== carId));
+    } else {
+      setSelectedCarIds([...selectedCarIds, carId]);
+    }
+  };
+
+  const handleAddCar = async (car: HotWheelsCar) => {
+    try {
+      setLoading(true);
+      await addCar(car);
+      const updatedCars = await loadCollection();
+      setCars(updatedCars);
+      setShowAddForm(false);
+      alert(t('collection.add.success'));
+    } catch (error) {
+      console.error('Error adding car:', error);
+      alert(t('collection.add.error'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditClick = (car: HotWheelsCar) => {
+    setCarToEdit(car);
+    setShowEditForm(true);
+  };
+
+  const handleEditCar = async (updatedCar: HotWheelsCar) => {
+    if (!updatedCar.id) return;
+    
+    try {
+      setLoading(true);
+      await updateCar(updatedCar.id, updatedCar);
+      const updatedCars = await loadCollection();
+      setCars(updatedCars);
+      setShowEditForm(false);
+      setCarToEdit(null);
+      alert(t('collection.edit.success'));
+    } catch (error) {
+      console.error('Error updating car:', error);
+      alert(t('collection.edit.error'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteCar = async (carId: string) => {
+    // Find the car to show details in confirmation
+    const carToDelete = cars.find(car => car.id === carId);
+    if (!carToDelete) return;
+    
+    const confirmMessage = `Delete your ${carToDelete.corPrincipal} ${carToDelete.anoModelo} ${carToDelete.marca} ${carToDelete.modelo}?`;
+    if (!confirm(confirmMessage)) return;
+    
+    try {
+      setLoading(true);
+      await deleteCar(carId);
+      const updatedCars = await loadCollection();
+      setCars(updatedCars);
+      alert(t('collection.delete.success'));
+    } catch (error) {
+      console.error('Error deleting car:', error);
+      alert(t('collection.delete.error'));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedCarIds.length === 0) return;
+    
+    const confirmMessage = 'Are you sure you want to delete all these cars?';
+    if (!confirm(confirmMessage)) return;
+    
+    try {
+      setLoading(true);
+      await deleteCarsInBulk(selectedCarIds);
+      const updatedCars = await loadCollection();
+      setCars(updatedCars);
+      setSelectedCarIds([]);
+      alert(t('collection.bulkDelete.success', { count: selectedCarIds.length }));
+    } catch (error) {
+      console.error('Error deleting cars:', error);
+      alert(t('collection.bulkDelete.error'));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -64,26 +185,52 @@ const Collection = () => {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
+            disabled={loading}
           />
-          <label className="file-upload-btn">
-            {t('collection.importCSV')}
+          <button 
+            className="add-car-btn"
+            onClick={() => setShowAddForm(true)}
+            disabled={loading}
+          >
+            ➕ {t('collection.addCar')}
+          </button>
+          <label className={`file-upload-btn ${loading ? 'disabled' : ''}`}>
+            {loading ? t('collection.loading') || 'Loading...' : t('collection.importCSV')}
             <input
               type="file"
               accept=".csv"
               onChange={handleFileUpload}
               style={{ display: 'none' }}
+              disabled={loading}
             />
           </label>
+          {selectedCarIds.length > 0 && (
+            <button 
+              className="bulk-delete-btn"
+              onClick={handleBulkDelete}
+              disabled={loading}
+            >
+              🗑️ {t('collection.deleteSelected')} ({selectedCarIds.length})
+            </button>
+          )}
         </div>
-        <p className="result-count">
-          {t('collection.resultsCount', { filtered: filteredCars.length, total: cars.length })}
-        </p>
       </header>
 
       <div className="table-container">
-        <table className="collection-table">
+        <p className="results-count">
+          {t('collection.resultsCount', { filtered: filteredCars.length, total: cars.length })}
+        </p>
+
+        <table className="cars-table">
           <thead>
             <tr>
+              <th className="checkbox-col">
+                <input
+                  type="checkbox"
+                  checked={selectedCarIds.length === filteredCars.length && filteredCars.length > 0}
+                  onChange={handleSelectAll}
+                />
+              </th>
               <th onClick={() => handleSort('marca')}>
                 {t('collection.headers.brand')} {getSortIcon('marca')}
               </th>
@@ -108,11 +255,19 @@ const Collection = () => {
               <th onClick={() => handleSort('notasTema')}>
                 {t('collection.headers.notesTheme')} {getSortIcon('notasTema')}
               </th>
+              <th className="actions-col">{t('collection.headers.actions')}</th>
             </tr>
           </thead>
           <tbody>
-            {filteredCars.map((car, index) => (
-              <tr key={index}>
+            {filteredCars.map((car) => (
+              <tr key={car.id} className={selectedCarIds.includes(car.id || '') ? 'selected' : ''}>
+                <td className="checkbox-col">
+                  <input
+                    type="checkbox"
+                    checked={selectedCarIds.includes(car.id || '')}
+                    onChange={() => handleSelectCar(car.id || '')}
+                  />
+                </td>
                 <td>{car.marca}</td>
                 <td>{car.modelo}</td>
                 <td>{car.anoModelo}</td>
@@ -121,19 +276,53 @@ const Collection = () => {
                 <td>{car.codigo}</td>
                 <td>{car.fabricante}</td>
                 <td>{car.notasTema}</td>
+                <td className="actions-col">
+                  <button 
+                    className="action-btn edit-btn" 
+                    onClick={() => handleEditClick(car)}
+                    title={t('collection.actions.edit')}
+                  >
+                    ✏️
+                  </button>
+                  <button 
+                    className="action-btn delete-btn" 
+                    onClick={() => handleDeleteCar(car.id || '')}
+                    title={t('collection.actions.delete')}
+                  >
+                    🗑️
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {filteredCars.length === 0 && (
+          <div className="empty-state">
+            <p>{t('collection.empty.noResults')}</p>
+            {cars.length === 0 && (
+              <p>{t('collection.empty.noData')}</p>
+            )}
+          </div>
+        )}
       </div>
 
-      {filteredCars.length === 0 && (
-        <div className="empty-state">
-          <p>{t('collection.empty.noResults')}</p>
-          {cars.length === 0 && (
-            <p>{t('collection.empty.noData')}</p>
-          )}
-        </div>
+      {showAddForm && (
+        <AddCarForm
+          onSave={handleAddCar}
+          onCancel={() => setShowAddForm(false)}
+        />
+      )}
+
+      {showEditForm && carToEdit && (
+        <EditCarForm
+          car={carToEdit}
+          onSave={handleEditCar}
+          onCancel={() => {
+            setShowEditForm(false);
+            setCarToEdit(null);
+          }}
+        />
       )}
     </div>
   );
