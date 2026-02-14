@@ -11,6 +11,18 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="Hot Wheels" />
     <title>Hot Wheels Collection</title>
+    
+    <!-- GitHub Pages SPA support -->
+    <script>
+      // Store the path for 404 redirects
+      (function() {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

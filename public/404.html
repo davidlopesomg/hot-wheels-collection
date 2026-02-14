@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Hot Wheels Collection</title>
+  <script>
+    // GitHub Pages SPA redirect workaround
+    // This script takes the current URL and converts it to work with HashRouter
+    (function() {
+      var redirect = sessionStorage.redirect;
+      delete sessionStorage.redirect;
+      
+      if (redirect && redirect !== location.href) {
+        // Convert path to hash format for HashRouter
+        var baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/');
+        var path = redirect.split(baseUrl)[1] || '/';
+        
+        // Redirect to index with hash
+        window.location.replace(baseUrl + '/#' + path);
+      } else {
+        // If no redirect, go to home
+        window.location.replace(window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/') + '#/');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+    <h1>🚗 Hot Wheels Collection</h1>
+    <p>Redirecting to dashboard...</p>
+  </div>
+</body>
+</html>
