@@ -5,6 +5,8 @@ import { trackCSVImport } from '../utils/analytics';
 import { HotWheelsCar } from '../types';
 import AddCarForm from '../components/AddCarForm';
 import EditCarForm from '../components/EditCarForm';
+import BrandIcon from '../components/BrandIcon';
+import ManufacturerIcon from '../components/ManufacturerIcon';
 import './Collection.css';
 
 const Collection = () => {
@@ -284,13 +286,13 @@ const Collection = () => {
                     onChange={() => handleSelectCar(car.id || '')}
                   />
                 </td>
-                <td>{car.marca}</td>
+                <td><BrandIcon brandName={car.marca} size={40} /></td>
                 <td>{car.modelo}</td>
                 <td>{car.anoModelo}</td>
                 <td>{car.corPrincipal}</td>
                 <td>{car.coresSecundarias}</td>
                 <td>{car.codigo}</td>
-                <td>{car.fabricante}</td>
+                <td><ManufacturerIcon manufacturerName={car.fabricante} size={40} /></td>
                 <td>{car.notasTema}</td>
                 <td className="actions-col">
                   <button 

@@ -1,0 +1,118 @@
+.brand-icon-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: help;
+  position: relative;
+  transition: transform 0.2s, filter 0.2s;
+  border-radius: 4px;
+}
+
+.brand-icon-container:hover {
+  transform: scale(1.05);
+  filter: brightness(1.1);
+}
+
+.brand-icon-container:focus-visible {
+  outline: 2px solid #2C84C7;
+  outline-offset: 2px;
+}
+
+.brand-icon-svg {
+  display: inline-block;
+  color: currentColor;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.brand-icon-svg svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.brand-icon-img {
+  object-fit: contain;
+  display: block;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.brand-icon-container.icon-error::before {
+  content: attr(title);
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
+}
+
+.brand-icon-text {
+  font-size: 0.9em;
+  color: #666;
+  cursor: help;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: rgba(44, 132, 199, 0.1);
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.brand-icon-text:hover {
+  background: rgba(44, 132, 199, 0.2);
+}
+
+/* Tooltip styling */
+[title] {
+  position: relative;
+}
+
+.brand-icon-container[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.95);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  white-space: pre-line;
+  z-index: 1000;
+  min-width: 180px;
+  text-align: center;
+  margin-bottom: 8px;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  line-height: 1.5;
+  animation: tooltipFadeIn 0.2s ease-out;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.brand-icon-container[title]:hover::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.95);
+  z-index: 1000;
+  pointer-events: none;
+  margin-bottom: 2px;
+}

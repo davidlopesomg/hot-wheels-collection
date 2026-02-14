@@ -3,6 +3,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { loadCollection, calculateStats } from '../utils/dataManager';
 import { CollectionStats } from '../types';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import BrandIcon from '../components/BrandIcon';
 import './Dashboard.css';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D', '#FFC658', '#8DD1E1', '#D084D0', '#A4DE6C'];
@@ -140,7 +141,9 @@ const Dashboard = () => {
           <div className="chart-list">
             {topBrands.map(([brand, count]) => (
               <div key={brand} className="chart-item">
-                <span className="chart-label">{brand}</span>
+                <span className="chart-label">
+                  <BrandIcon brandName={brand} size={48} />
+                </span>
                 <div className="chart-bar-container">
                   <div 
                     className="chart-bar" 
