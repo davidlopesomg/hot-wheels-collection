@@ -149,6 +149,9 @@ export const pt = {
     },
     errors: {
       camera: "Erro ao aceder à câmara. Verifique as permissões.",
+      permission: "Permissão de câmara negada. Por favor, permita o acesso à câmara nas definições do navegador.",
+      noCamera: "Nenhuma câmara encontrada neste dispositivo.",
+      cameraInUse: "A câmara já está a ser utilizada por outra aplicação.",
       search: "Erro ao pesquisar na colecção"    },
     ocr: {
       title: "Escanear Código Base",
@@ -306,6 +309,9 @@ export const pt = {
       logoAdded: "Logótipo adicionado com sucesso!",
       errors: {
         camera: "Erro ao aceder à câmara. Verifique as permissões.",
+        permission: "Permissão de câmara negada. Por favor, permita o acesso à câmara nas definições do navegador.",
+        noCamera: "Nenhuma câmara encontrada neste dispositivo.",
+        cameraInUse: "A câmara já está a ser utilizada por outra aplicação.",
         noBarcode: "Nenhum código de barras encontrado na imagem. Por favor, tente novamente."
       }
     },

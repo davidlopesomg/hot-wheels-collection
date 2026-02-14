@@ -45,18 +45,35 @@ const UPCScanner = ({ onBarcodeDetected, onCancel }: UPCScannerProps) => {
         ]
       };
 
-      await scanner.start(
-        { facingMode: 'environment' },
-        config,
-        (decodedText) => {
-          // Barcode successfully scanned
-          onBarcodeDetected(decodedText);
-          stopScanner();
-        },
-        (_errorMessage) => {
-          // Scanning errors (ignore these as they're frequent during scanning)
-        }
-      );
+      // Try rear camera first, fallback to any available camera
+      try {
+        await scanner.start(
+          { facingMode: { ideal: 'environment' } },
+          config,
+          (decodedText) => {
+            // Barcode successfully scanned
+            onBarcodeDetected(decodedText);
+            stopScanner();
+          },
+          (_errorMessage) => {
+            // Scanning errors (ignore these as they're frequent during scanning)
+          }
+        );
+      } catch (e) {
+        // Fallback: try without camera constraint if rear camera fails
+        console.log('Rear camera not available, trying default camera');
+        await scanner.start(
+          { facingMode: 'user' }, // Use front camera as fallback
+          config,
+          (decodedText) => {
+            onBarcodeDetected(decodedText);
+            stopScanner();
+          },
+          (_errorMessage) => {
+            // Scanning errors
+          }
+        );
+      }
     } catch (err: any) {
       console.error('Scanner start error:', err);
       setError(err.message || t('admin.manufacturers.errors.camera') || 'Failed to start camera');
@@ -153,6 +170,7 @@ const UPCScanner = ({ onBarcodeDetected, onCancel }: UPCScannerProps) => {
             <input
               type="file"
               accept="image/*"
+              capture="environment"
               onChange={handleFileUpload}
               className="file-input"
             />

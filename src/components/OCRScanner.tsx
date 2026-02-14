@@ -46,19 +46,48 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
 
   const startCamera = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }
-      });
+      setError('');
+      
+      // First try with rear camera preference
+      let stream;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { 
+            facingMode: { ideal: 'environment' },
+            width: { ideal: 1920 },
+            height: { ideal: 1080 }
+          }
+        });
+      } catch (e) {
+        // Fallback: try without facingMode constraint
+        console.log('Rear camera not available, trying default camera');
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: true
+        });
+      }
       
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        videoRef.current.setAttribute('playsinline', 'true');
+        videoRef.current.setAttribute('webkit-playsinline', 'true');
+        await videoRef.current.play();
         streamRef.current = stream;
         setIsCameraActive(true);
         setError('');
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Camera error:', err);
-      setError(t('scanner.errors.camera') || 'Failed to access camera');
+      let errorMessage = t('scanner.errors.camera') || 'Failed to access camera';
+      
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
+        errorMessage = t('scanner.errors.permission') || 'Camera permission denied. Please allow camera access in your browser settings.';
+      } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        errorMessage = t('scanner.errors.noCamera') || 'No camera found on this device.';
+      } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
+        errorMessage = t('scanner.errors.cameraInUse') || 'Camera is already in use by another application.';
+      }
+      
+      setError(errorMessage);
     }
   };
 
@@ -176,6 +205,7 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
                 ref={fileInputRef}
                 type="file"
                 accept="image/*"
+                capture="environment"
                 onChange={handleFileUpload}
                 style={{ display: 'none' }}
               />
@@ -188,6 +218,7 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
                 ref={videoRef}
                 autoPlay
                 playsInline
+                muted
                 className="video-preview"
               />
               <div className="camera-overlay">

@@ -149,6 +149,9 @@ export const en = {
     },
     errors: {
       camera: "Error accessing camera. Check permissions.",
+      permission: "Camera permission denied. Please allow camera access in your browser settings.",
+      noCamera: "No camera found on this device.",
+      cameraInUse: "Camera is already in use by another application.",
       search: "Error searching collection"
     },
     ocr: {
@@ -307,6 +310,9 @@ export const en = {
       logoAdded: "Logo added successfully!",
       errors: {
         camera: "Error accessing camera. Check permissions.",
+        permission: "Camera permission denied. Please allow camera access in your browser settings.",
+        noCamera: "No camera found on this device.",
+        cameraInUse: "Camera is already in use by another application.",
         noBarcode: "No barcode found in image. Please try again."
       }
     },
