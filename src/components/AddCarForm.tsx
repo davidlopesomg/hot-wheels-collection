@@ -7,11 +7,12 @@ import './AddCarForm.css';
 
 interface AddCarFormProps {
   scannedCode?: string;
+  scannedUPC?: string;
   onSave: (car: HotWheelsCar) => void;
   onCancel: () => void;
 }
 
-const AddCarForm = ({ scannedCode = '', onSave, onCancel }: AddCarFormProps) => {
+const AddCarForm = ({ scannedCode = '', scannedUPC = '', onSave, onCancel }: AddCarFormProps) => {
   const { t, language } = useLanguage();
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
   const [isAddingNewBrand, setIsAddingNewBrand] = useState(false);
@@ -26,6 +27,7 @@ const AddCarForm = ({ scannedCode = '', onSave, onCancel }: AddCarFormProps) => 
     corPrincipal: '',
     coresSecundarias: '',
     codigo: scannedCode,
+    upc: scannedUPC,
     fabricante: 'Hot Wheels',
     notasTema: ''
   });

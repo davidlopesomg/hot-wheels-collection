@@ -5,7 +5,8 @@ export interface HotWheelsCar {
   anoModelo: string;       // Model Year
   corPrincipal: string;    // Primary Color
   coresSecundarias: string; // Secondary Colors
-  codigo: string;          // Code/SKU
+  codigo: string;          // Code/SKU (Hot Wheels Product Code)
+  upc?: string;            // UPC Barcode (12-13 digits)
   fabricante: string;      // Manufacturer
   notasTema: string;       // Notes/Theme
 }

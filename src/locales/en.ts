@@ -131,6 +131,23 @@ export const en = {
     errors: {
       camera: "Error accessing camera. Check permissions.",
       search: "Error searching collection"
+    },
+    ocr: {
+      title: "Scan Product Code",
+      instructions: "Photograph the red product code on the package (e.g., JBC17-N521 21A)",
+      useCamera: "Use Camera",
+      uploadImage: "Upload Image",
+      alignCode: "Align product code in frame",
+      capture: "Capture",
+      processing: "Processing image...",
+      detectedText: "Detected Text:",
+      noCodeFound: "No product code found. Please try again.",
+      error: "Failed to process image",
+      retry: "Try Again",
+      manualEntry: "Or enter the code manually:",
+      scanUpcFirst: "Scan UPC Barcode First",
+      notFoundPrompt: "Not found? Let's scan the product code on the package",
+      scanProductCode: "Scan Product Code"
     }
   }
 };

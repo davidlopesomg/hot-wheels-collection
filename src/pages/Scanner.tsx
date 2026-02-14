@@ -5,6 +5,7 @@ import { loadCollection, searchCar, addCar } from '../utils/dataManager';
 import { trackBarcodeScan, trackCarAdd } from '../utils/analytics';
 import { HotWheelsCar } from '../types';
 import AddCarForm from '../components/AddCarForm';
+import OCRScanner from '../components/OCRScanner';
 import './Scanner.css';
 
 const Scanner = () => {
@@ -13,11 +14,14 @@ const Scanner = () => {
   const [result, setResult] = useState<HotWheelsCar | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [scannedCode, setScannedCode] = useState('');
+  const [scannedUPC, setScannedUPC] = useState('');
   const [error, setError] = useState<string>('');
   const scannerRef = useRef<Html5Qrcode | null>(null);
   const [manualCode, setManualCode] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showOCRScanner, setShowOCRScanner] = useState(false);
   const [addFormCode, setAddFormCode] = useState('');
+  const [addFormUPC, setAddFormUPC] = useState('');
 
   const startScanner = async () => {
     try {
@@ -67,12 +71,28 @@ const Scanner = () => {
         setResult(found);
         setNotFound(false);
         setScannedCode('');
+        setScannedUPC('');
         trackBarcodeScan(true);
       } else {
-        setResult(null);
-        setNotFound(true);
-        setScannedCode(code);
-        trackBarcodeScan(false);
+        // Not found - check if this looks like a UPC code (numeric, 12-13 digits)
+        const isUPC = /^\d{12,13}$/.test(code);
+        
+        if (isUPC) {
+          // Step 1 complete: UPC scanned but not found
+          // Save UPC and prompt for Step 2: OCR scan
+          setScannedUPC(code);
+          setResult(null);
+          setNotFound(true);
+          setScannedCode('');
+          trackBarcodeScan(false);
+        } else {
+          // Looks like a product code (not UPC)
+          setResult(null);
+          setNotFound(true);
+          setScannedCode(code);
+          setScannedUPC('');
+          trackBarcodeScan(false);
+        }
       }
 
       stopScanner();
@@ -82,16 +102,33 @@ const Scanner = () => {
     }
   };
 
+  const handleOCRResult = (productCode: string) => {
+    setScannedCode(productCode);
+    setShowOCRScanner(false);
+    // Open add form with both UPC and product code
+    openAddForm(productCode, scannedUPC);
+  };
+
+  const openOCRScanner = () => {
+    setShowOCRScanner(true);
+  };
+
+  const closeOCRScanner = () => {
+    setShowOCRScanner(false);
+  };
+
   const handleAddCar = async (car: HotWheelsCar) => {
     try {
       await addCar(car);
       // Track if added from scan or manual entry
-      const method = scannedCode ? 'scan' : 'manual';
+      const method = scannedCode || scannedUPC ? 'scan' : 'manual';
       trackCarAdd(method);
       setShowAddForm(false);
       setNotFound(false);
       setScannedCode('');
+      setScannedUPC('');
       setAddFormCode('');
+      setAddFormUPC('');
       setManualCode('');
       // Show success message
       alert(t('scanner.addCar.success'));
@@ -101,20 +138,23 @@ const Scanner = () => {
     }
   };
 
-  const openAddForm = (code: string = '') => {
+  const openAddForm = (code: string = '', upc: string = '') => {
     setAddFormCode(code);
+    setAddFormUPC(upc);
     setShowAddForm(true);
   };
 
   const closeAddForm = () => {
     setShowAddForm(false);
     setAddFormCode('');
+    setAddFormUPC('');
   };
 
   const resetScanner = () => {
     setResult(null);
     setNotFound(false);
     setScannedCode('');
+    setScannedUPC('');
     setManualCode('');
   };
 
@@ -228,6 +268,11 @@ const Scanner = () => {
           <div className="result-card not-found">
             <div className="result-icon">✗</div>
             <h2>{t('scanner.notFound.title')}</h2>
+            {scannedUPC && (
+              <p className="scanned-info">
+                {t('scanner.notFound.scannedCode')}: <strong>{scannedUPC}</strong> (UPC)
+              </p>
+            )}
             {scannedCode && (
               <p className="scanned-info">
                 {t('scanner.notFound.scannedCode')}: <strong>{scannedCode}</strong>
@@ -235,7 +280,12 @@ const Scanner = () => {
             )}
             <p>{t('scanner.notFound.message')}</p>
             <div className="not-found-actions">
-              <button onClick={() => openAddForm(scannedCode)} className="btn-add">
+              {scannedUPC && !scannedCode && (
+                <button onClick={openOCRScanner} className="btn-ocr">
+                  📷 {t('scanner.ocr.scanProductCode')}
+                </button>
+              )}
+              <button onClick={() => openAddForm(scannedCode, scannedUPC)} className="btn-add">
                 ➕ {t('scanner.notFound.addButton')}
               </button>
               <button onClick={resetScanner} className="btn-secondary">
@@ -246,9 +296,17 @@ const Scanner = () => {
         )}
       </div>
 
+      {showOCRScanner && (
+        <OCRScanner 
+          onCodeDetected={handleOCRResult}
+          onCancel={closeOCRScanner}
+        />
+      )}
+
       {showAddForm && (
         <AddCarForm
           scannedCode={addFormCode}
+          scannedUPC={addFormUPC}
           onSave={handleAddCar}
           onCancel={closeAddForm}
         />

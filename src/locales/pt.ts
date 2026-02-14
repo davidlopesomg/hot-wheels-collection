@@ -130,7 +130,22 @@ export const pt = {
     },
     errors: {
       camera: "Erro ao aceder à câmara. Verifique as permissões.",
-      search: "Erro ao pesquisar na colecção"
-    }
+      search: "Erro ao pesquisar na colecção"    },
+    ocr: {
+      title: "Digitalizar Código do Produto",
+      instructions: "Fotografe o código do produto vermelho na embalagem (ex: JBC17-N521 21A)",
+      useCamera: "Usar Câmara",
+      uploadImage: "Carregar Imagem",
+      alignCode: "Alinhe o código na moldura",
+      capture: "Capturar",
+      processing: "A processar imagem...",
+      detectedText: "Texto Detetado:",
+      noCodeFound: "Nenhum código de produto encontrado. Por favor, tente novamente.",
+      error: "Falha ao processar imagem",
+      retry: "Tentar Novamente",
+      manualEntry: "Ou introduza o código manualmente:",
+      scanUpcFirst: "Digitalize o Código de Barras UPC Primeiro",
+      notFoundPrompt: "Não encontrado? Vamos digitalizar o código do produto na embalagem",
+      scanProductCode: "Digitalizar Código do Produto"    }
   }
 };
