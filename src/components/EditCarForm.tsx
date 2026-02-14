@@ -10,11 +10,10 @@ interface EditCarFormProps {
   car: HotWheelsCar;
   onSave: (car: HotWheelsCar) => void;
   onCancel: () => void;
-  onScanUPC?: (upc: string) => void;
   onScanCode?: (code: string) => void;
 }
 
-const EditCarForm = ({ car, onSave, onCancel, onScanUPC, onScanCode }: EditCarFormProps) => {
+const EditCarForm = ({ car, onSave, onCancel, onScanCode }: EditCarFormProps) => {
   const { t, language } = useLanguage();
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
   const [isAddingNewBrand, setIsAddingNewBrand] = useState(false);
@@ -266,27 +265,6 @@ const EditCarForm = ({ car, onSave, onCancel, onScanUPC, onScanCode }: EditCarFo
                   title={t('collection.scanProductCode')}
                 >
                   📷 OCR
-                </button>
-              </div>
-            </div>
-
-            {/* UPC Field with Barcode Scanner */}
-            <div className="form-field">
-              <label>{t('collection.upcBarcode')}</label>
-              <div className="input-with-scanner-btn">
-                <input
-                  type="text"
-                  value={formData.upc || ''}
-                  onChange={(e) => handleChange('upc', e.target.value)}
-                  placeholder={t('collection.upcPlaceholder')}
-                />
-                <button
-                  type="button"
-                  className="btn-scanner-icon"
-                  onClick={() => onScanUPC && onScanUPC(formData.upc || '')}
-                  title={t('collection.scanUPC')}
-                >
-                  📷 UPC
                 </button>
               </div>
             </div>

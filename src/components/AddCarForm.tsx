@@ -8,14 +8,12 @@ import './AddCarForm.css';
 
 interface AddCarFormProps {
   scannedCode?: string;
-  scannedUPC?: string;
   onSave: (car: HotWheelsCar) => void;
   onCancel: () => void;
-  onScanUPC?: (upc: string) => void;
   onScanCode?: (code: string) => void;
 }
 
-const AddCarForm = ({ scannedCode = '', scannedUPC = '', onSave, onCancel, onScanUPC, onScanCode }: AddCarFormProps) => {
+const AddCarForm = ({ scannedCode = '', onSave, onCancel, onScanCode }: AddCarFormProps) => {
   const { t, language } = useLanguage();
   const [availableBrands, setAvailableBrands] = useState<string[]>([]);
   const [isAddingNewBrand, setIsAddingNewBrand] = useState(false);
@@ -31,7 +29,6 @@ const AddCarForm = ({ scannedCode = '', scannedUPC = '', onSave, onCancel, onSca
     corPrincipal: '',
     coresSecundarias: '',
     codigo: scannedCode,
-    upc: scannedUPC,
     fabricante: 'Hot Wheels',
     notasTema: ''
   });
@@ -273,27 +270,6 @@ const AddCarForm = ({ scannedCode = '', scannedUPC = '', onSave, onCancel, onSca
                   title={t('collection.scanProductCode')}
                 >
                   📷 OCR
-                </button>
-              </div>
-            </div>
-
-            {/* UPC Field with Barcode Scanner */}
-            <div className="form-field">
-              <label>{t('collection.upcBarcode')}</label>
-              <div className="input-with-scanner-btn">
-                <input
-                  type="text"
-                  value={formData.upc || ''}
-                  onChange={(e) => handleChange('upc', e.target.value)}
-                  placeholder={t('collection.upcPlaceholder')}
-                />
-                <button
-                  type="button"
-                  className="btn-scanner-icon"
-                  onClick={() => onScanUPC && onScanUPC(formData.upc || '')}
-                  title={t('collection.scanUPC')}
-                >
-                  📷 UPC
                 </button>
               </div>
             </div>

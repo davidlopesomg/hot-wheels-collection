@@ -41,10 +41,6 @@ export const en = {
     addCar: "Add Car",
     deleteSelected: "Delete Selected",
     resultsCount: "{{filtered}} of {{total}} cars",
-    upcBarcode: "UPC Barcode",
-    upcPlaceholder: "12-13 digit barcode",
-    scanUPC: "Scan UPC Barcode",
-    scanProductCode: "Scan Product Code with OCR",
     headers: {
       brand: "Brand",
       model: "Model",
@@ -94,12 +90,12 @@ export const en = {
   
   // Scanner
   scanner: {
-    title: "Scan Code",
-    subtitle: "Scan the barcode to check if you already have the car",
+    title: "Scan Base Code",
+    subtitle: "Scan the base code on the car to check if you already have it",
     startScanner: "Start Scanner",
     cancel: "Cancel",
-    manualInput: "or enter the code manually:",
-    enterCode: "Enter the code",
+    manualInput: "or enter the base code manually:",
+    enterCode: "Enter the code (e.g., JJJ26-N521)",
     search: "Search",
     scanAnother: "Scan Another",
     addManual: {
@@ -108,6 +104,11 @@ export const en = {
     },
     found: {
       title: "I ALREADY HAVE THIS CAR!",
+      codeBreakdown: "Base Code Breakdown",
+      seriesCode: "Series Code",
+      collectorNumber: "Collector Number",
+      productionYear: "Production Year",
+      factoryCode: "Factory Code",
       brand: "Brand:",
       model: "Model:",
       year: "Year:",
@@ -119,6 +120,7 @@ export const en = {
     notFound: {
       title: "I DON'T HAVE THIS CAR",
       scannedCode: "Scanned code",
+      collectorNumber: "Collector Number",
       message: "This car is not in your collection. You can buy it!",
       addButton: "Add to Collection"
     },
@@ -150,21 +152,21 @@ export const en = {
       search: "Error searching collection"
     },
     ocr: {
-      title: "Scan Product Code",
-      instructions: "Photograph the red product code on the package (e.g., JBC17-N521 21A)",
+      title: "Scan Base Code",
+      instruction: "Scan the base code on the bottom of the car",
+      scanButton: "Scan Base Code (OCR)",
+      instructions: "Photograph the base code on the car's bottom (e.g., JJJ26-N521 21A)",
       useCamera: "Use Camera",
       uploadImage: "Upload Image",
-      alignCode: "Align product code in frame",
+      alignCode: "Align base code in frame",
       capture: "Capture",
       processing: "Processing image...",
       detectedText: "Detected Text:",
-      noCodeFound: "No product code found. Please try again.",
+      noCodeFound: "No base code found. Please try again.",
       error: "Failed to process image",
       retry: "Try Again",
       manualEntry: "Or enter the code manually:",
-      scanUpcFirst: "Scan UPC Barcode First",
-      notFoundPrompt: "Not found? Let's scan the product code on the package",
-      scanProductCode: "Scan Product Code"
+      scanProductCode: "Scan Base Code"
     }
   },
 

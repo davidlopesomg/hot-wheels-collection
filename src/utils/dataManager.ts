@@ -199,7 +199,8 @@ export const searchCar = (cars: HotWheelsCar[], query: string): HotWheelsCar | n
       car.codigo.toLowerCase().includes(lowerQuery) ||
       car.modelo.toLowerCase().includes(lowerQuery) ||
       car.marca.toLowerCase().includes(lowerQuery) ||
-      (car.upc && car.upc.includes(lowerQuery))
+      (car.collectorNumber && car.collectorNumber.toLowerCase().includes(lowerQuery)) ||
+      (car.seriesCode && car.seriesCode.toLowerCase().includes(lowerQuery))
   ) || null;
 };
 

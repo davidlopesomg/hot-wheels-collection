@@ -41,10 +41,6 @@ export const pt = {
     addCar: "Adicionar Carro",
     deleteSelected: "Eliminar Selecionados",
     resultsCount: "{{filtered}} de {{total}} carros",
-    upcBarcode: "Código de Barras UPC",
-    upcPlaceholder: "Código de barras de 12-13 dígitos",
-    scanUPC: "Digitalizar Código de Barras UPC",
-    scanProductCode: "Digitalizar Código do Produto com OCR",
     headers: {
       brand: "Marca",
       model: "Modelo",
@@ -94,12 +90,12 @@ export const pt = {
   
   // Scanner
   scanner: {
-    title: "Escanear Código",
-    subtitle: "Escaneie o código de barras para verificar se já tem o carro",
+    title: "Escanear Código Base",
+    subtitle: "Escaneie o código base no carro para verificar se já o tem",
     startScanner: "Iniciar Scanner",
     cancel: "Cancelar",
-    manualInput: "ou digite o código manualmente:",
-    enterCode: "Digite o código",
+    manualInput: "ou digite o código base manualmente:",
+    enterCode: "Digite o código (ex: JJJ26-N521)",
     search: "Pesquisar",
     scanAnother: "Escanear Outro",
     addManual: {
@@ -108,6 +104,11 @@ export const pt = {
     },
     found: {
       title: "JÁ TENHO ESTE CARRO!",
+      codeBreakdown: "Detalhes do Código Base",
+      seriesCode: "Código da Série",
+      collectorNumber: "Número de Colecionador",
+      productionYear: "Ano de Produção",
+      factoryCode: "Código da Fábrica",
       brand: "Marca:",
       model: "Modelo:",
       year: "Ano:",
@@ -119,6 +120,7 @@ export const pt = {
     notFound: {
       title: "NÃO TENHO ESTE CARRO",
       scannedCode: "Código escaneado",
+      collectorNumber: "Número de Colecionador",
       message: "Este carro não está na sua colecção. Pode comprar!",
       addButton: "Adicionar à Colecção"
     },
@@ -149,21 +151,21 @@ export const pt = {
       camera: "Erro ao aceder à câmara. Verifique as permissões.",
       search: "Erro ao pesquisar na colecção"    },
     ocr: {
-      title: "Digitalizar Código do Produto",
-      instructions: "Fotografe o código do produto vermelho na embalagem (ex: JBC17-N521 21A)",
+      title: "Escanear Código Base",
+      instruction: "Escaneie o código base no fundo do carro",
+      scanButton: "Escanear Código Base (OCR)",
+      instructions: "Fotografe o código base no fundo do carro (ex: JJJ26-N521 21A)",
       useCamera: "Usar Câmara",
       uploadImage: "Carregar Imagem",
-      alignCode: "Alinhe o código na moldura",
+      alignCode: "Alinhe o código base na moldura",
       capture: "Capturar",
       processing: "A processar imagem...",
       detectedText: "Texto Detetado:",
-      noCodeFound: "Nenhum código de produto encontrado. Por favor, tente novamente.",
+      noCodeFound: "Nenhum código base encontrado. Por favor, tente novamente.",
       error: "Falha ao processar imagem",
       retry: "Tentar Novamente",
       manualEntry: "Ou introduza o código manualmente:",
-      scanUpcFirst: "Digitalize o Código de Barras UPC Primeiro",
-      notFoundPrompt: "Não encontrado? Vamos digitalizar o código do produto na embalagem",
-      scanProductCode: "Digitalizar Código do Produto"
+      scanProductCode: "Escanear Código Base"
     }
   },
 

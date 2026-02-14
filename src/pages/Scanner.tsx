@@ -1,116 +1,77 @@
-import { useEffect, useState, useRef } from 'react';
-import { Html5Qrcode } from 'html5-qrcode';
+import { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
-import { loadCollection, searchCar, addCar } from '../utils/dataManager';
+import { loadCollection, addCar } from '../utils/dataManager';
 import { trackBarcodeScan, trackCarAdd } from '../utils/analytics';
 import { HotWheelsCar } from '../types';
+import { parseBaseCode } from '../utils/codeParser';
 import AddCarForm from '../components/AddCarForm';
 import OCRScanner from '../components/OCRScanner';
 import './Scanner.css';
 
 const Scanner = () => {
   const { t } = useLanguage();
-  const [isScanning, setIsScanning] = useState(false);
   const [result, setResult] = useState<HotWheelsCar | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [scannedCode, setScannedCode] = useState('');
-  const [scannedUPC, setScannedUPC] = useState('');
+  const [parsedCode, setParsedCode] = useState<any>(null);
   const [error, setError] = useState<string>('');
-  const scannerRef = useRef<Html5Qrcode | null>(null);
   const [manualCode, setManualCode] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [showOCRScanner, setShowOCRScanner] = useState(false);
   const [addFormCode, setAddFormCode] = useState('');
-  const [addFormUPC, setAddFormUPC] = useState('');
 
-  const startScanner = async () => {
+  const handleOCRResult = async (baseCode: string) => {
     try {
-      const scanner = new Html5Qrcode("qr-reader");
-      scannerRef.current = scanner;
+      setShowOCRScanner(false);
 
-      await scanner.start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          qrbox: { width: 250, height: 250 }
-        },
-        (decodedText) => {
-          handleScanResult(decodedText);
-        },
-        () => {
-          // Scan error - ignore
-        }
-      );
+      // Parse the base code
+      const parsed = parseBaseCode(baseCode);
+      setParsedCode(parsed);
+      setScannedCode(baseCode);
 
-      setIsScanning(true);
-      setError('');
-    } catch (err: any) {
-      console.error("Scanner error:", err);
-      setError(t('scanner.errors.camera'));
-    }
-  };
-
-  const stopScanner = async () => {
-    if (scannerRef.current) {
-      try {
-        await scannerRef.current.stop();
-        scannerRef.current.clear();
-      } catch (err) {
-        console.error("Error stopping scanner:", err);
-      }
-    }
-    setIsScanning(false);
-  };
-
-  const handleScanResult = async (code: string) => {
-    try {
+      // Search for car by collector number (most reliable identifier)
       const cars = await loadCollection();
-      const found = searchCar(cars, code);
+      let found: HotWheelsCar | null = null;
+
+      if (parsed.collectorNumber) {
+        // Primary search: by collector number
+        found = cars.find(car => 
+          car.collectorNumber === parsed.collectorNumber
+        ) || null;
+
+        // Fallback: search by full code match
+        if (!found) {
+          found = cars.find(car => 
+            car.codigo.includes(parsed.collectorNumber || '')
+          ) || null;
+        }
+      }
+
+      // Secondary fallback: search by any part of the code
+      if (!found && baseCode) {
+        found = cars.find(car => 
+          car.codigo.toLowerCase().includes(baseCode.toLowerCase())
+        ) || null;
+      }
 
       if (found) {
         setResult(found);
         setNotFound(false);
-        setScannedCode('');
-        setScannedUPC('');
         trackBarcodeScan(true);
       } else {
-        // Not found - check if this looks like a UPC code (numeric, 12-13 digits)
-        const isUPC = /^\d{12,13}$/.test(code);
-        
-        if (isUPC) {
-          // Step 1 complete: UPC scanned but not found
-          // Save UPC and prompt for Step 2: OCR scan
-          setScannedUPC(code);
-          setResult(null);
-          setNotFound(true);
-          setScannedCode('');
-          trackBarcodeScan(false);
-        } else {
-          // Looks like a product code (not UPC)
-          setResult(null);
-          setNotFound(true);
-          setScannedCode(code);
-          setScannedUPC('');
-          trackBarcodeScan(false);
-        }
+        setResult(null);
+        setNotFound(true);
+        trackBarcodeScan(false);
       }
-
-      stopScanner();
     } catch (error) {
       console.error('Error searching for car:', error);
       setError(t('scanner.errors.search') || 'Error searching collection');
     }
   };
 
-  const handleOCRResult = (productCode: string) => {
-    setScannedCode(productCode);
-    setShowOCRScanner(false);
-    // Open add form with both UPC and product code
-    openAddForm(productCode, scannedUPC);
-  };
-
   const openOCRScanner = () => {
     setShowOCRScanner(true);
+    setError('');
   };
 
   const closeOCRScanner = () => {
@@ -119,18 +80,24 @@ const Scanner = () => {
 
   const handleAddCar = async (car: HotWheelsCar) => {
     try {
-      await addCar(car);
-      // Track if added from scan or manual entry
-      const method = scannedCode || scannedUPC ? 'scan' : 'manual';
+      // Enrich car data with parsed code information
+      const enrichedCar = { ...car };
+      if (parsedCode) {
+        enrichedCar.seriesCode = parsedCode.seriesCode;
+        enrichedCar.collectorNumber = parsedCode.collectorNumber;
+        enrichedCar.productionYear = parsedCode.productionYear;
+        enrichedCar.factoryCode = parsedCode.factoryCode;
+      }
+
+      await addCar(enrichedCar);
+      const method = scannedCode ? 'scan' : 'manual';
       trackCarAdd(method);
       setShowAddForm(false);
       setNotFound(false);
       setScannedCode('');
-      setScannedUPC('');
+      setParsedCode(null);
       setAddFormCode('');
-      setAddFormUPC('');
       setManualCode('');
-      // Show success message
       alert(t('scanner.addCar.success'));
     } catch (error) {
       console.error('Error adding car:', error);
@@ -138,36 +105,29 @@ const Scanner = () => {
     }
   };
 
-  const openAddForm = (code: string = '', upc: string = '') => {
+  const openAddForm = (code: string = '') => {
     setAddFormCode(code);
-    setAddFormUPC(upc);
     setShowAddForm(true);
   };
 
   const closeAddForm = () => {
     setShowAddForm(false);
     setAddFormCode('');
-    setAddFormUPC('');
   };
 
   const resetScanner = () => {
     setResult(null);
     setNotFound(false);
     setScannedCode('');
-    setScannedUPC('');
+    setParsedCode(null);
     setManualCode('');
+    setError('');
   };
 
-  const handleManualSearch = () =>{
+  const handleManualSearch = async () => {
     if (!manualCode.trim()) return;
-    handleScanResult(manualCode);
+    await handleOCRResult(manualCode);
   };
-
-  useEffect(() => {
-    return () => {
-      stopScanner();
-    };
-  }, []);
 
   return (
     <div className="scanner">
@@ -177,13 +137,14 @@ const Scanner = () => {
       </header>
 
       <div className="scanner-container">
-        <div id="qr-reader" className={isScanning ? 'active' : ''}></div>
-
-        {!isScanning && !result && !notFound && (
+        {!result && !notFound && (
           <div className="scanner-controls">
-            <button onClick={startScanner} className="btn-primary">
-              📷 {t('scanner.startScanner')}
-            </button>
+            <div className="ocr-scan-section">
+              <p>{t('scanner.ocr.instruction')}</p>
+              <button onClick={openOCRScanner} className="btn-primary">
+                📷 {t('scanner.ocr.scanButton')}
+              </button>
+            </div>
 
             <div className="manual-input">
               <p>{t('scanner.manualInput')}</p>
@@ -208,12 +169,6 @@ const Scanner = () => {
           </div>
         )}
 
-        {isScanning && (
-          <button onClick={stopScanner} className="btn-secondary">
-            {t('scanner.cancel')}
-          </button>
-        )}
-
         {error && (
           <div className="alert alert-error">
             {error}
@@ -224,6 +179,37 @@ const Scanner = () => {
           <div className="result-card found">
             <div className="result-icon">✓</div>
             <h2>{t('scanner.found.title')}</h2>
+            
+            {parsedCode && (
+              <div className="code-breakdown">
+                <h3>{t('scanner.found.codeBreakdown')}</h3>
+                {parsedCode.seriesCode && (
+                  <div className="code-part">
+                    <span className="code-label">{t('scanner.found.seriesCode')}:</span>
+                    <span className="code-value">{parsedCode.seriesCode}</span>
+                  </div>
+                )}
+                {parsedCode.collectorNumber && (
+                  <div className="code-part highlight">
+                    <span className="code-label">{t('scanner.found.collectorNumber')}:</span>
+                    <span className="code-value">{parsedCode.collectorNumber}</span>
+                  </div>
+                )}
+                {parsedCode.productionYear && (
+                  <div className="code-part">
+                    <span className="code-label">{t('scanner.found.productionYear')}:</span>
+                    <span className="code-value">20{parsedCode.productionYear}</span>
+                  </div>
+                )}
+                {parsedCode.factoryCode && (
+                  <div className="code-part">
+                    <span className="code-label">{t('scanner.found.factoryCode')}:</span>
+                    <span className="code-value">{parsedCode.factoryCode}</span>
+                  </div>
+                )}
+              </div>
+            )}
+            
             <div className="car-details">
               <div className="detail-row">
                 <span className="label">{t('scanner.found.brand')}</span>
@@ -268,24 +254,21 @@ const Scanner = () => {
           <div className="result-card not-found">
             <div className="result-icon">✗</div>
             <h2>{t('scanner.notFound.title')}</h2>
-            {scannedUPC && (
-              <p className="scanned-info">
-                {t('scanner.notFound.scannedCode')}: <strong>{scannedUPC}</strong> (UPC)
-              </p>
-            )}
             {scannedCode && (
-              <p className="scanned-info">
-                {t('scanner.notFound.scannedCode')}: <strong>{scannedCode}</strong>
-              </p>
+              <>
+                <p className="scanned-info">
+                  {t('scanner.notFound.scannedCode')}: <strong>{scannedCode}</strong>
+                </p>
+                {parsedCode && parsedCode.collectorNumber && (
+                  <div className="code-info">
+                    <p>{t('scanner.notFound.collectorNumber')}: <strong>{parsedCode.collectorNumber}</strong></p>
+                  </div>
+                )}
+              </>
             )}
             <p>{t('scanner.notFound.message')}</p>
             <div className="not-found-actions">
-              {scannedUPC && !scannedCode && (
-                <button onClick={openOCRScanner} className="btn-ocr">
-                  📷 {t('scanner.ocr.scanProductCode')}
-                </button>
-              )}
-              <button onClick={() => openAddForm(scannedCode, scannedUPC)} className="btn-add">
+              <button onClick={() => openAddForm(scannedCode)} className="btn-add">
                 ➕ {t('scanner.notFound.addButton')}
               </button>
               <button onClick={resetScanner} className="btn-secondary">
@@ -306,7 +289,6 @@ const Scanner = () => {
       {showAddForm && (
         <AddCarForm
           scannedCode={addFormCode}
-          scannedUPC={addFormUPC}
           onSave={handleAddCar}
           onCancel={closeAddForm}
         />
