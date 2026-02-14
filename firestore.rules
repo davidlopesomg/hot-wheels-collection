@@ -1,0 +1,67 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Cars collection - Hot Wheels cars data
+    match /cars/{carId} {
+      // Anyone can read
+      allow read: if true;
+      
+      // Validate required fields on create
+      allow create: if request.resource.data.keys().hasAll(['carNumber', 'carName', 'brand', 'dateAdded'])
+                    && request.resource.data.carNumber is string
+                    && request.resource.data.carName is string
+                    && request.resource.data.brand is string
+                    && request.resource.data.dateAdded is timestamp;
+      
+      // Allow updates with field validation
+      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+                    .hasOnly(['carNumber', 'carName', 'brand', 'manufacturer', 
+                             'series', 'year', 'color', 'baseColor', 'tampo', 
+                             'wheelType', 'baseType', 'windowColor', 'interiorColor', 
+                             'countryMade', 'toyNumber', 'segment', 'upcCode', 'notes', 
+                             'dateAdded', 'dateModified']);
+      
+      // Allow delete
+      allow delete: if true;
+    }
+    
+    // Custom manufacturers collection
+    match /custom_manufacturers/{manufacturerId} {
+      // Anyone can read
+      allow read: if true;
+      
+      // Validate required fields on create
+      allow create: if request.resource.data.keys().hasAll(['name'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 100;
+      
+      // Allow updates to name, logoUrl, and timestamps
+      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+                    .hasOnly(['name', 'logoUrl', 'createdAt', 'modifiedAt']);
+      
+      // Allow delete
+      allow delete: if true;
+    }
+    
+    // Custom brands collection
+    match /custom_brands/{brandId} {
+      // Anyone can read
+      allow read: if true;
+      
+      // Validate required fields on create
+      allow create: if request.resource.data.keys().hasAll(['name'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 100;
+      
+      // Allow updates to name, logoUrl, and timestamps
+      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+                    .hasOnly(['name', 'logoUrl', 'createdAt', 'modifiedAt']);
+      
+      // Allow delete
+      allow delete: if true;
+    }
+  }
+}
