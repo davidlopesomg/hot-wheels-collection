@@ -104,15 +104,16 @@ const Admin = () => {
 
               <div className="tool-card full-width">
                 <h3>ℹ️ {t('admin.import.requiredColumns')}</h3>
+                <p className="info-text">{t('admin.import.bilingualSupport')}</p>
                 <ul className="column-list">
-                  <li><strong>Marca</strong> - {t('admin.import.brandColumn')}</li>
-                  <li><strong>Modelo</strong> - {t('admin.import.modelColumn')}</li>
-                  <li><strong>Código</strong> - {t('admin.import.codeColumn')}</li>
-                  <li><strong>Fabricante</strong> - {t('admin.import.manufacturerColumn')}</li>
-                  <li><strong>Ano do Modelo</strong> - {t('admin.import.yearColumn')}</li>
-                  <li><strong>Cor Principal</strong> - {t('admin.import.primaryColorColumn')}</li>
-                  <li><strong>Cor(es) Segundária(s)</strong> - {t('admin.import.secondaryColorsColumn')}</li>
-                  <li><strong>Notas/Tema</strong> - {t('admin.import.notesColumn')}</li>
+                  <li><strong>Marca / Brand</strong> - {t('admin.import.brandColumn')}</li>
+                  <li><strong>Modelo / Model</strong> - {t('admin.import.modelColumn')}</li>
+                  <li><strong>Código / Code</strong> - {t('admin.import.codeColumn')}</li>
+                  <li><strong>Fabricante / Manufacturer</strong> - {t('admin.import.manufacturerColumn')}</li>
+                  <li><strong>Ano do Modelo / Model Year</strong> - {t('admin.import.yearColumn')}</li>
+                  <li><strong>Cor Principal / Primary Color</strong> - {t('admin.import.primaryColorColumn')}</li>
+                  <li><strong>Cor(es) Segundária(s) / Secondary Color(s)</strong> - {t('admin.import.secondaryColorsColumn')}</li>
+                  <li><strong>Notas/Tema / Notes/Theme</strong> - {t('admin.import.notesColumn')}</li>
                 </ul>
               </div>
             </div>

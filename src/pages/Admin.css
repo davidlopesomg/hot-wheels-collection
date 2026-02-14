@@ -179,6 +179,16 @@
   font-weight: 600;
 }
 
+.info-text {
+  background: linear-gradient(135deg, rgba(44, 132, 199, 0.1) 0%, rgba(212, 47, 65, 0.1) 100%);
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border-left: 4px solid #2C84C7;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  color: #1a5a8a;
+}
+
 @media (max-width: 768px) {
   .admin-page {
     padding: 0.5rem;

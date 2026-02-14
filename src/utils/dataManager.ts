@@ -24,6 +24,38 @@ interface CSVValidationError {
   message: string;
 }
 
+// CSV Header Mapping - supports both Portuguese and English
+const CSV_HEADER_MAP: { [key: string]: string } = {
+  // Portuguese headers
+  'Marca': 'marca',
+  'Modelo': 'modelo',
+  'Ano do Modelo': 'anoModelo',
+  'Cor Principal': 'corPrincipal',
+  'Cor(es) Segundária(s)': 'coresSecundarias',
+  'Código': 'codigo',
+  'Fabricante': 'fabricante',
+  'Notas/Tema': 'notasTema',
+  // English headers
+  'Brand': 'marca',
+  'Model': 'modelo',
+  'Model Year': 'anoModelo',
+  'Primary Color': 'corPrincipal',
+  'Secondary Color(s)': 'coresSecundarias',
+  'Code': 'codigo',
+  'Manufacturer': 'fabricante',
+  'Notes/Theme': 'notasTema'
+};
+
+const getFieldValue = (row: any, field: string): string => {
+  // Try all possible header names for this field
+  for (const [header, mappedField] of Object.entries(CSV_HEADER_MAP)) {
+    if (mappedField === field && row[header]) {
+      return row[header];
+    }
+  }
+  return '';
+};
+
 export const validateCSVStructure = (file: File): Promise<{ valid: boolean; errors: CSVValidationError[] }> => {
   return new Promise((resolve) => {
     Papa.parse(file, {
@@ -32,17 +64,30 @@ export const validateCSVStructure = (file: File): Promise<{ valid: boolean; erro
       preview: 0, // Parse all rows for validation
       complete: (results) => {
         const errors: CSVValidationError[] = [];
-        const requiredColumns = ['Marca', 'Modelo', 'Código', 'Fabricante'];
-        
-        // Check if required columns exist
         const headers = results.meta.fields || [];
-        const missingColumns = requiredColumns.filter(col => !headers.includes(col));
         
-        if (missingColumns.length > 0) {
+        // Check if required fields can be found in either language
+        const requiredFields = ['marca', 'modelo', 'codigo', 'fabricante'];
+        const fieldLabels = {
+          'marca': 'Brand/Marca',
+          'modelo': 'Model/Modelo',
+          'codigo': 'Code/Código',
+          'fabricante': 'Manufacturer/Fabricante'
+        };
+        
+        const missingFields: string[] = [];
+        for (const field of requiredFields) {
+          const hasField = headers.some(header => CSV_HEADER_MAP[header] === field);
+          if (!hasField) {
+            missingFields.push(fieldLabels[field as keyof typeof fieldLabels]);
+          }
+        }
+        
+        if (missingFields.length > 0) {
           errors.push({
             row: 0,
             field: 'headers',
-            message: `Missing required columns: ${missingColumns.join(', ')}`
+            message: `Missing required columns: ${missingFields.join(', ')}`
           });
           resolve({ valid: false, errors });
           return;
@@ -52,25 +97,28 @@ export const validateCSVStructure = (file: File): Promise<{ valid: boolean; erro
         results.data.forEach((row: any, index: number) => {
           const rowNumber = index + 2; // +2 because CSV has header row and is 1-indexed
           
-          // Check required fields
-          if (!row['Marca'] || row['Marca'].trim() === '') {
-            errors.push({ row: rowNumber, field: 'Marca', message: 'Brand is required' });
+          // Check required fields using the mapping function
+          const marca = getFieldValue(row, 'marca');
+          if (!marca || marca.trim() === '') {
+            errors.push({ row: rowNumber, field: 'Brand/Marca', message: 'Brand is required' });
           }
           
-          if (!row['Modelo'] || row['Modelo'].trim() === '') {
-            errors.push({ row: rowNumber, field: 'Modelo', message: 'Model is required' });
+          const modelo = getFieldValue(row, 'modelo');
+          if (!modelo || modelo.trim() === '') {
+            errors.push({ row: rowNumber, field: 'Model/Modelo', message: 'Model is required' });
           }
           
-          if (!row['Código'] || row['Código'].trim() === '') {
-            errors.push({ row: rowNumber, field: 'Código', message: 'Code is required' });
+          const codigo = getFieldValue(row, 'codigo');
+          if (!codigo || codigo.trim() === '') {
+            errors.push({ row: rowNumber, field: 'Code/Código', message: 'Code is required' });
           }
           
           // Validate manufacturer against known list
-          const fabricante = row['Fabricante'] || '';
-          if (fabricante && !MANUFACTURERS.includes(fabricante)) {
+          const fabricante = getFieldValue(row, 'fabricante');
+          if (fabricante && !(MANUFACTURERS as readonly string[]).includes(fabricante)) {
             errors.push({ 
               row: rowNumber, 
-              field: 'Fabricante', 
+              field: 'Manufacturer/Fabricante', 
               message: `Invalid manufacturer: "${fabricante}". Must be one of: ${MANUFACTURERS.slice(0, 5).join(', ')}...` 
             });
           }
@@ -95,20 +143,20 @@ export const parseCSV = (file: File): Promise<HotWheelsCar[]> => {
       skipEmptyLines: true,
       complete: (results) => {
         const cars: HotWheelsCar[] = results.data.map((row: any) => {
-          const primaryColor = row['Cor Principal'] || '';
-          const secondaryColors = row['Cor(es) Segundária(s)'] || '';
+          const primaryColor = getFieldValue(row, 'corPrincipal');
+          const secondaryColors = getFieldValue(row, 'coresSecundarias');
           
           return {
-            marca: row['Marca'] || '',
-            modelo: row['Modelo'] || '',
-            anoModelo: row['Ano do Modelo'] || '',
+            marca: getFieldValue(row, 'marca'),
+            modelo: getFieldValue(row, 'modelo'),
+            anoModelo: getFieldValue(row, 'anoModelo'),
             corPrincipal: normalizeColorToEnglish(primaryColor),
             coresSecundarias: secondaryColors ? 
               secondaryColors.split(',').map((c: string) => normalizeColorToEnglish(c.trim())).join(', ') : 
               '',
-            codigo: row['Código'] || '',
-            fabricante: row['Fabricante'] || '',
-            notasTema: row['Notas/Tema'] || ''
+            codigo: getFieldValue(row, 'codigo'),
+            fabricante: getFieldValue(row, 'fabricante'),
+            notasTema: getFieldValue(row, 'notasTema')
           };
         });
         resolve(cars);

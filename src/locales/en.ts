@@ -215,6 +215,7 @@ export const en = {
       templateDescription: "Download a CSV template with the correct format and example data.",
       downloadButton: "Download Template.csv",
       requiredColumns: "Required Columns",
+      bilingualSupport: "CSV headers can be in Portuguese or English. Both formats are supported.",
       brandColumn: "Car brand name (required)",
       modelColumn: "Car model name (required)",
       codeColumn: "Product code (required)",

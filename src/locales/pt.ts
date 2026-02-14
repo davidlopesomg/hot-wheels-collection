@@ -214,6 +214,7 @@ export const pt = {
       templateDescription: "Descarregue um modelo CSV com o formato correto e dados de exemplo.",
       downloadButton: "Descarregar Template.csv",
       requiredColumns: "Colunas Necessárias",
+      bilingualSupport: "Os cabeçalhos do CSV podem estar em Português ou Inglês. Ambos os formatos são suportados.",
       brandColumn: "Nome da marca do carro (obrigatório)",
       modelColumn: "Nome do modelo do carro (obrigatório)",
       codeColumn: "Código do produto (obrigatório)",
