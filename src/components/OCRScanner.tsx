@@ -16,6 +16,7 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
   const [detectedText, setDetectedText] = useState<string>('');
   const [error, setError] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -206,16 +207,26 @@ const OCRScanner = ({ onCodeDetected, onCancel }: OCRScannerProps) => {
           {!previewImage && !isCameraActive && (
             <div className="ocr-options">
               {isMobileDevice ? (
-                // On mobile, show single button that opens camera via file input
+                // On mobile, show two buttons: camera and gallery
                 <>
                   <button className="btn-camera" onClick={startCamera}>
-                    📷 {t('scanner.ocr.takePicture') || 'Take Picture'}
+                    📷 {t('scanner.ocr.useCamera') || 'Take Picture'}
+                  </button>
+                  <button className="btn-upload" onClick={() => galleryInputRef.current?.click()}>
+                    🖼️ {t('scanner.ocr.uploadImage') || 'Choose from Gallery'}
                   </button>
                   <input
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
                     capture="environment"
+                    onChange={handleFileUpload}
+                    style={{ display: 'none' }}
+                  />
+                  <input
+                    ref={galleryInputRef}
+                    type="file"
+                    accept="image/*"
                     onChange={handleFileUpload}
                     style={{ display: 'none' }}
                   />

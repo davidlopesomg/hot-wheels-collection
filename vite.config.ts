@@ -7,6 +7,12 @@ export default defineConfig({
   base: process.env.GITHUB_ACTIONS ? '/hot-wheels-collection/' : '/',
   build: {
     outDir: 'dist',
-    assetsDir: 'assets'
-  }
+    assetsDir: 'assets',
+    rollupOptions: {
+      input: {
+        main: './index.html',
+      }
+    }
+  },
+  publicDir: 'public'
 })
