@@ -7,6 +7,7 @@ A modern, mobile-first web application for managing your Hot Wheels car collecti
 - **📷 Barcode Scanner** - Quickly scan barcodes at the store to check if you already own a car
 - **🚗 Collection Management** - View, sort, and search your entire collection
 - **📊 Statistics Dashboard** - Track collection stats with visual charts
+- **🌐 Bilingual Interface** - Switch between English and Portuguese (Portugal)
 - **📱 Mobile-First Design** - Optimized for smartphones with full desktop support
 - **💾 Local Storage** - Your data stays on your device
 - **📂 CSV Import/Export** - Easy data management

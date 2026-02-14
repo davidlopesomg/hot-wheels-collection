@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { loadCollection, sortCars, filterCars, parseCSV, saveCollection } from '../utils/dataManager';
 import { HotWheelsCar } from '../types';
 import './Collection.css';
 
 const Collection = () => {
+  const { t } = useLanguage();
   const [cars, setCars] = useState<HotWheelsCar[]>([]);
   const [filteredCars, setFilteredCars] = useState<HotWheelsCar[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -38,9 +40,9 @@ const Collection = () => {
         const parsedCars = await parseCSV(file);
         setCars(parsedCars);
         saveCollection(parsedCars);
-        alert(`${parsedCars.length} carros carregados com sucesso!`);
+        alert(t('collection.alerts.importSuccess', { count: parsedCars.length }));
       } catch (error) {
-        alert('Erro ao carregar o arquivo CSV');
+        alert(t('collection.alerts.importError'));
         console.error(error);
       }
     }
@@ -54,17 +56,17 @@ const Collection = () => {
   return (
     <div className="collection">
       <header className="collection-header">
-        <h1>Coleção Completa</h1>
+        <h1>{t('collection.title')}</h1>
         <div className="collection-tools">
           <input
             type="text"
-            placeholder="Pesquisar..."
+            placeholder={t('collection.search')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
           <label className="file-upload-btn">
-            Importar CSV
+            {t('collection.importCSV')}
             <input
               type="file"
               accept=".csv"
@@ -73,7 +75,9 @@ const Collection = () => {
             />
           </label>
         </div>
-        <p className="result-count">{filteredCars.length} de {cars.length} carros</p>
+        <p className="result-count">
+          {t('collection.resultsCount', { filtered: filteredCars.length, total: cars.length })}
+        </p>
       </header>
 
       <div className="table-container">
@@ -81,28 +85,28 @@ const Collection = () => {
           <thead>
             <tr>
               <th onClick={() => handleSort('marca')}>
-                Marca {getSortIcon('marca')}
+                {t('collection.headers.brand')} {getSortIcon('marca')}
               </th>
               <th onClick={() => handleSort('modelo')}>
-                Modelo {getSortIcon('modelo')}
+                {t('collection.headers.model')} {getSortIcon('modelo')}
               </th>
               <th onClick={() => handleSort('anoModelo')}>
-                Ano {getSortIcon('anoModelo')}
+                {t('collection.headers.year')} {getSortIcon('anoModelo')}
               </th>
               <th onClick={() => handleSort('corPrincipal')}>
-                Cor Principal {getSortIcon('corPrincipal')}
+                {t('collection.headers.primaryColor')} {getSortIcon('corPrincipal')}
               </th>
               <th onClick={() => handleSort('coresSecundarias')}>
-                Cores Secundárias {getSortIcon('coresSecundarias')}
+                {t('collection.headers.secondaryColors')} {getSortIcon('coresSecundarias')}
               </th>
               <th onClick={() => handleSort('codigo')}>
-                Código {getSortIcon('codigo')}
+                {t('collection.headers.code')} {getSortIcon('codigo')}
               </th>
               <th onClick={() => handleSort('fabricante')}>
-                Fabricante {getSortIcon('fabricante')}
+                {t('collection.headers.manufacturer')} {getSortIcon('fabricante')}
               </th>
               <th onClick={() => handleSort('notasTema')}>
-                Notas/Tema {getSortIcon('notasTema')}
+                {t('collection.headers.notesTheme')} {getSortIcon('notasTema')}
               </th>
             </tr>
           </thead>
@@ -125,9 +129,9 @@ const Collection = () => {
 
       {filteredCars.length === 0 && (
         <div className="empty-state">
-          <p>Nenhum carro encontrado.</p>
+          <p>{t('collection.empty.noResults')}</p>
           {cars.length === 0 && (
-            <p>Carregue um arquivo CSV para começar!</p>
+            <p>{t('collection.empty.noData')}</p>
           )}
         </div>
       )}

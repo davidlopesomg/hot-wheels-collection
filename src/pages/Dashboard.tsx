@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
 import { loadCollection, calculateStats } from '../utils/dataManager';
 import { CollectionStats } from '../types';
 import './Dashboard.css';
 
 const Dashboard = () => {
+  const { t } = useLanguage();
   const [stats, setStats] = useState<CollectionStats | null>(null);
 
   useEffect(() => {
@@ -13,7 +15,7 @@ const Dashboard = () => {
   }, []);
 
   if (!stats) {
-    return <div className="dashboard loading">Loading...</div>;
+    return <div className="dashboard loading">{t('dashboard.loading')}</div>;
   }
 
   const topBrands = Object.entries(stats.byBrand)
@@ -27,35 +29,35 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <header className="dashboard-header">
-        <h1>Minha Coleção</h1>
-        <p className="subtitle">Estatísticas da coleção Hot Wheels</p>
+        <h1>{t('dashboard.title')}</h1>
+        <p className="subtitle">{t('dashboard.subtitle')}</p>
       </header>
 
       <div className="stats-grid">
         <div className="stat-card total">
           <div className="stat-value">{stats.total}</div>
-          <div className="stat-label">Total de Carros</div>
+          <div className="stat-label">{t('dashboard.totalCars')}</div>
         </div>
 
         <div className="stat-card">
           <div className="stat-value">{Object.keys(stats.byBrand).length}</div>
-          <div className="stat-label">Marcas Diferentes</div>
+          <div className="stat-label">{t('dashboard.differentBrands')}</div>
         </div>
 
         <div className="stat-card">
           <div className="stat-value">{Object.keys(stats.byYear).length}</div>
-          <div className="stat-label">Anos Diferentes</div>
+          <div className="stat-label">{t('dashboard.differentYears')}</div>
         </div>
 
         <div className="stat-card">
           <div className="stat-value">{Object.keys(stats.byColor).length}</div>
-          <div className="stat-label">Cores Diferentes</div>
+          <div className="stat-label">{t('dashboard.differentColors')}</div>
         </div>
       </div>
 
       <div className="charts-grid">
         <div className="chart-card">
-          <h2>Top 5 Marcas</h2>
+          <h2>{t('dashboard.topBrands')}</h2>
           <div className="chart-list">
             {topBrands.map(([brand, count]) => (
               <div key={brand} className="chart-item">
@@ -73,7 +75,7 @@ const Dashboard = () => {
         </div>
 
         <div className="chart-card">
-          <h2>Top 5 Cores</h2>
+          <h2>{t('dashboard.topColors')}</h2>
           <div className="chart-list">
             {topColors.map(([color, count]) => (
               <div key={color} className="chart-item">
@@ -91,7 +93,7 @@ const Dashboard = () => {
         </div>
 
         <div className="chart-card">
-          <h2>Por Fabricante</h2>
+          <h2>{t('dashboard.byManufacturer')}</h2>
           <div className="chart-list">
             {Object.entries(stats.byManufacturer)
               .sort(([, a], [, b]) => b - a)
