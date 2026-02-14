@@ -2,31 +2,77 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Hot Wheels Collection</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hot Wheels Collection - Redirecting...</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 50px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #2C84C7 0%, #4251AE 100%);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      max-width: 600px;
+    }
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    .spinner {
+      margin: 2rem auto;
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
   <script>
-    // GitHub Pages SPA redirect workaround
-    // This script takes the current URL and converts it to work with HashRouter
+    // GitHub Pages SPA redirect - convert path to hash format
     (function() {
-      var redirect = sessionStorage.redirect;
-      delete sessionStorage.redirect;
+      var pathSegmentsToKeep = 1; // Keep /hot-wheels-collection/
+      var location = window.location;
       
-      if (redirect && redirect !== location.href) {
-        // Convert path to hash format for HashRouter
-        var baseUrl = window.location.origin + window.location.pathname.split('/').slice(0, -1).join('/');
-        var path = redirect.split(baseUrl)[1] || '/';
+      if (location.pathname.length > 1) {
+        var redirect = location.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/');
+        redirect = redirect ? '/#/' + redirect : '/#/';
+        
+        // Add query string if present
+        if (location.search) {
+          redirect += location.search;
+        }
         
         // Redirect to index with hash
-        window.location.replace(baseUrl + '/#' + path);
+        window.location.replace(
+          location.origin + 
+          location.pathname.split('/').slice(0, pathSegmentsToKeep + 1).join('/') + 
+          redirect
+        );
       } else {
-        // If no redirect, go to home
-        window.location.replace(window.location.origin + window.location.pathname.replace(/\/[^/]*$/, '/') + '#/');
+        // No path, just go to home
+        window.location.replace(location.origin + location.pathname + '#/');
       }
     })();
   </script>
 </head>
 <body>
-  <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+  <div class="container">
     <h1>🚗 Hot Wheels Collection</h1>
+    <div class="spinner"></div>
     <p>Redirecting to dashboard...</p>
   </div>
 </body>

@@ -5,17 +5,17 @@ import './Navigation.css';
 
 const Navigation = () => {
   const { t } = useLanguage();
+  const baseUrl = import.meta.env.BASE_URL;
   
   return (
     <nav className="navigation">
       <div className="nav-container">
         <div className="nav-brand">
           <img 
-            src="/assets/img/hot-wheels-text-logo.svg" 
+            src={`${baseUrl}assets/img/hot-wheels-text-logo.svg`}
             alt="Hot Wheels" 
             className="nav-logo"
             onError={(e) => {
-              console.error('Logo failed to load from:', e.currentTarget.src);
               e.currentTarget.style.display = 'none';
               const text = e.currentTarget.nextElementSibling;
               if (text) (text as HTMLElement).style.display = 'block';
