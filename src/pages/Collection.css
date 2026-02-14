@@ -1,0 +1,152 @@
+.collection {
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.collection-header {
+  margin-bottom: 1.5rem;
+}
+
+.collection-header h1 {
+  font-size: 2rem;
+  color: #e63946;
+  margin-bottom: 1rem;
+}
+
+.collection-tools {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.75rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #e63946;
+}
+
+.file-upload-btn {
+  padding: 0.75rem 1.5rem;
+  background: #e63946;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.file-upload-btn:hover {
+  background: #d62839;
+}
+
+.result-count {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+.collection-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.collection-table thead {
+  background: linear-gradient(135deg, #e63946 0%, #ff758c 100%);
+  color: white;
+}
+
+.collection-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.collection-table th:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.collection-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.collection-table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.collection-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #666;
+}
+
+.empty-state p {
+  margin: 0.5rem 0;
+}
+
+@media (max-width: 768px) {
+  .collection {
+    padding: 0.5rem;
+  }
+
+  .collection-tools {
+    flex-direction: column;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .table-container {
+    border-radius: 8px;
+  }
+
+  .collection-table th,
+  .collection-table td {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .collection-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .collection-table {
+    font-size: 0.75rem;
+  }
+
+  .collection-table th,
+  .collection-table td {
+    padding: 0.4rem;
+  }
+}
