@@ -24,7 +24,12 @@ export const en = {
     colorDistribution: "Colour Distribution",
     filterByManufacturer: "Filter by Manufacturer",
     allManufacturers: "All Manufacturers",
-    loading: "Loading..."
+    loading: "Loading...",
+    empty: {
+      title: "Your collection is empty",
+      message: "Start building your Hot Wheels collection today!",
+      hint: "Use the Scanner or Collection page to add cars."
+    }
   },
   
   // Collection

@@ -297,6 +297,7 @@ const Collection = () => {
                     className="action-btn edit-btn" 
                     onClick={() => handleEditClick(car)}
                     title={t('collection.actions.edit')}
+                    aria-label={t('collection.actions.edit')}
                   >
                     ✏️
                   </button>
@@ -304,6 +305,7 @@ const Collection = () => {
                     className="action-btn delete-btn" 
                     onClick={() => handleDeleteCar(car.id || '')}
                     title={t('collection.actions.delete')}
+                    aria-label={t('collection.actions.delete')}
                   >
                     🗑️
                   </button>

@@ -67,6 +67,17 @@
   margin-bottom: 0.5rem;
   color: #333;
   font-size: 0.9rem;
+  display: block;
+}
+
+/* Required field indicator */
+label:has(+ input[required])::after,
+label:has(+ select[required])::after,
+label:has(+ textarea[required])::after {
+  content: ' *';
+  color: #D42F41;
+  font-weight: bold;
+  margin-left: 0.25rem;
 }
 
 .form-field input,
@@ -87,6 +98,34 @@
   outline: none;
   border-color: #D42F41;
   box-shadow: 0 0 0 3px rgba(212, 47, 65, 0.1);
+}
+
+/* Invalid field states */
+.form-field input:invalid:not(:focus):not(:placeholder-shown),
+.form-field textarea:invalid:not(:focus):not(:placeholder-shown),
+.form-field select:invalid:not(:focus) {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+/* Valid field states */
+.form-field input:valid[required]:not(:placeholder-shown),
+.form-field textarea:valid[required]:not(:placeholder-shown),
+.form-field select:valid[required] {
+  border-color: #28a745;
+}
+
+.form-field input:invalid:not(:focus):not(:placeholder-shown),
+.form-field textarea:invalid:not(:focus):not(:placeholder-shown),
+.form-field select:invalid:not(:focus) {
+  border-color: #dc3545;
+  background-color: #fff5f5;
+}
+
+.form-field input:valid:not(:placeholder-shown),
+.form-field textarea:valid:not(:placeholder-shown),
+.form-field select:valid {
+  border-color: #28a745;
 }
 
 .form-field select {

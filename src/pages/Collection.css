@@ -112,13 +112,18 @@
 .result-count {
   color: #666;
   font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .results-count {
   color: #666;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   padding: 1rem;
   margin: 0;
+  font-weight: 500;
+  text-align: center;
+  background: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
 }
 
 .table-container {
@@ -148,6 +153,8 @@
   font-weight: 600;
   cursor: pointer;
   user-select: none;
+  position: relative;
+  transition: background-color 0.2s;
   white-space: nowrap;
   transition: background 0.2s;
 }
@@ -191,12 +198,42 @@
   border-radius: 6px;
   font-size: 1.2rem;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s;
   background: transparent;
+  position: relative;
+}
+
+.action-btn:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.action-btn::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-5px);
+  background: #333;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+  z-index: 1000;
+}
+
+.action-btn:hover::after,
+.action-btn:focus::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-8px);
 }
 
 .action-btn:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .edit-btn {
@@ -226,9 +263,15 @@
   transition: background-color 0.2s;
 }
 
+.collection-table tbody tr:nth-child(even),
+.cars-table tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
 .collection-table tbody tr:hover,
 .cars-table tbody tr:hover {
-  background: #f8f9fa;
+  background: #f0f7ff !important;
+  box-shadow: inset 0 0 0 1px rgba(44, 132, 199, 0.2);
 }
 
 .collection-table tbody tr.selected,
@@ -248,12 +291,45 @@
 
 .empty-state {
   text-align: center;
-  padding: 3rem;
+  padding: 4rem 2rem;
   color: #666;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  border-radius: 12px;
+  margin: 2rem 0;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .empty-state p {
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.empty-state p:first-child {
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: #D42F41;
+}
+
+.empty-state p:last-child {
+  color: #2C84C7;
+  font-weight: 500;
 }
 
 @media (max-width: 768px) {

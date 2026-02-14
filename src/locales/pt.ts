@@ -24,7 +24,12 @@ export const pt = {
     colorDistribution: "Distribuição de Cores",
     filterByManufacturer: "Filtrar por Fabricante",
     allManufacturers: "Todos os Fabricantes",
-    loading: "A carregar..."
+    loading: "A carregar...",
+    empty: {
+      title: "A sua coleção está vazia",
+      message: "Comece a construir a sua coleção Hot Wheels hoje!",
+      hint: "Use o Leitor de Código ou a página de Coleção para adicionar carros."
+    }
   },
   
   // Collection

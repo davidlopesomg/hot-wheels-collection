@@ -50,6 +50,19 @@ const Dashboard = () => {
     );
   }
 
+  if (stats.total === 0) {
+    return (
+      <div className="dashboard empty">
+        <div className="empty-state-dashboard">
+          <div className="empty-icon">📦</div>
+          <h2>{t('dashboard.empty.title')}</h2>
+          <p>{t('dashboard.empty.message')}</p>
+          <p>{t('dashboard.empty.hint')}</p>
+        </div>
+      </div>
+    );
+  }
+
   const topBrands = Object.entries(stats.byBrand)
     .sort(([, a], [, b]) => b - a)
     .slice(0, 5);
