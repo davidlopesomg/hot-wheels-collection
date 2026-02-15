@@ -17,7 +17,7 @@ export default function Login() {
     e.preventDefault();
     
     if (!email || !password) {
-      setError('Please enter both email and password');
+      setError(t('login.errors.required'));
       return;
     }
 
@@ -31,15 +31,15 @@ export default function Login() {
       
       // Provide user-friendly error messages
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
-        setError('Invalid email or password');
+        setError(t('login.errors.invalidCredentials'));
       } else if (err.code === 'auth/user-not-found') {
-        setError('No user found with this email');
+        setError(t('login.errors.userNotFound'));
       } else if (err.code === 'auth/invalid-email') {
-        setError('Invalid email format');
+        setError(t('login.errors.invalidEmail'));
       } else if (err.code === 'auth/too-many-requests') {
-        setError('Too many failed attempts. Please try again later');
+        setError(t('login.errors.tooManyRequests'));
       } else {
-        setError('Failed to sign in. Please try again');
+        setError(t('login.errors.generic'));
       }
     } finally {
       setLoading(false);
@@ -51,7 +51,7 @@ export default function Login() {
       <div className="login-card">
         <h1 className="login-title">🔐 Admin Login</h1>
         <p className="login-subtitle">
-          {t('login.subtitle', 'Sign in to manage your Hot Wheels collection')}
+          {t('login.subtitle')}
         </p>
 
         <form onSubmit={handleSubmit} className="login-form">
@@ -64,7 +64,7 @@ export default function Login() {
 
           <div className="form-group">
             <label htmlFor="email">
-              {t('login.email', 'Email')}
+              {t('login.email')}
             </label>
             <input
               id="email"
@@ -80,7 +80,7 @@ export default function Login() {
 
           <div className="form-group">
             <label htmlFor="password">
-              {t('login.password', 'Password')}
+              {t('login.password')}
             </label>
             <input
               id="password"
@@ -102,24 +102,24 @@ export default function Login() {
             {loading ? (
               <>
                 <span className="spinner"></span>
-                {t('login.signingIn', 'Signing in...')}
+                {t('login.signingIn')}
               </>
             ) : (
-              t('login.signIn', 'Sign In')
+              t('login.signIn')
             )}
           </button>
         </form>
 
         <div className="login-guest-notice">
           <p>
-            <strong>{t('login.guestNotice', 'Note:')}</strong> {' '}
-            {t('login.guestMessage', 'Guests can view the collection without logging in.')}
+            <strong>{t('login.guestNotice')}</strong> {' '}
+            {t('login.guestMessage')}
           </p>
           <button 
             className="btn-back-home"
             onClick={() => navigate('/')}
           >
-            {t('login.backToCollection', 'Back to Collection')}
+            {t('login.backToCollection')}
           </button>
         </div>
       </div>

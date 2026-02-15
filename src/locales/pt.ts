@@ -5,7 +5,10 @@ export const pt = {
     dashboard: "Painel de Controlo",
     collection: "Coleção",
     scanner: "Ler Código",
-    admin: "Admin"
+    admin: "Admin",
+    login: "Entrar",
+    logout: "Sair",
+    adminLogin: "Login Admin"
   },
   
   // Dashboard
@@ -187,6 +190,9 @@ export const pt = {
     title: "Administração",
     subtitle: "Gerir marcas, fabricantes, cores e importação de dados",
     comingSoon: "Brevemente",
+    authRequired: "Autenticação Necessária",
+    authMessage: "Deve iniciar sessão para aceder ao painel de administração.",
+    goToLogin: "Ir para Login",
     tabs: {
       brands: "Marcas",
       manufacturers: "Fabricantes",
@@ -339,6 +345,26 @@ export const pt = {
       primaryColorColumn: "Cor principal (opcional)",
       secondaryColorsColumn: "Cores secundárias, separadas por vírgula (opcional)",
       notesColumn: "Notas ou tema (opcional)"
+    }
+  },
+
+  // Login
+  login: {
+    subtitle: "Inicie sessão para gerir a sua coleção Hot Wheels",
+    email: "Email",
+    password: "Palavra-passe",
+    signingIn: "A iniciar sessão...",
+    signIn: "Iniciar Sessão",
+    guestNotice: "Nota:",
+    guestMessage: "Os visitantes podem ver a coleção sem iniciar sessão.",
+    backToCollection: "Voltar à Coleção",
+    errors: {
+      required: "Por favor, insira o email e a palavra-passe",
+      invalidCredentials: "Email ou palavra-passe inválidos",
+      userNotFound: "Nenhum utilizador encontrado com este email",
+      invalidEmail: "Formato de email inválido",
+      tooManyRequests: "Demasiadas tentativas falhadas. Por favor, tente novamente mais tarde",
+      generic: "Falha ao iniciar sessão. Por favor, tente novamente"
     }
   }
 };

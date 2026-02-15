@@ -22,13 +22,13 @@ const Admin = () => {
         <div className="auth-required-message">
           <div className="auth-required-card">
             <span className="auth-icon">🔐</span>
-            <h2>{t('admin.authRequired', 'Authentication Required')}</h2>
-            <p>{t('admin.authMessage', 'You must be logged in to access the admin panel.')}</p>
+            <h2>{t('admin.authRequired')}</h2>
+            <p>{t('admin.authMessage')}</p>
             <button 
               className="btn-primary"
               onClick={() => navigate('/login')}
             >
-              {t('admin.goToLogin', 'Go to Login')}
+              {t('admin.goToLogin')}
             </button>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { loadCollection, addCar } from '../utils/dataManager';
 import { trackBarcodeScan, trackCarAdd } from '../utils/analytics';
 import { HotWheelsCar } from '../types';
@@ -10,6 +11,7 @@ import './Scanner.css';
 
 const Scanner = () => {
   const { t } = useLanguage();
+  const { isAdmin } = useAuth();
   const [result, setResult] = useState<HotWheelsCar | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [scannedCode, setScannedCode] = useState('');
@@ -159,13 +161,6 @@ const Scanner = () => {
                 <button onClick={handleManualSearch}>{t('scanner.search')}</button>
               </div>
             </div>
-
-            <div className="add-manual-section">
-              <p>{t('scanner.addManual.text')}</p>
-              <button onClick={() => openAddForm()} className="btn-add-manual">
-                ➕ {t('scanner.addManual.button')}
-              </button>
-            </div>
           </div>
         )}
 
@@ -268,9 +263,11 @@ const Scanner = () => {
             )}
             <p>{t('scanner.notFound.message')}</p>
             <div className="not-found-actions">
-              <button onClick={() => openAddForm(scannedCode)} className="btn-add">
-                ➕ {t('scanner.notFound.addButton')}
-              </button>
+              {isAdmin && (
+                <button onClick={() => openAddForm(scannedCode)} className="btn-add">
+                  ➕ {t('scanner.notFound.addButton')}
+                </button>
+              )}
               <button onClick={resetScanner} className="btn-secondary">
                 {t('scanner.scanAnother')}
               </button>

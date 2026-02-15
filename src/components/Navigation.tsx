@@ -66,10 +66,10 @@ const Navigation = () => {
           <button 
             className="btn-auth" 
             onClick={handleAuthClick}
-            title={user ? 'Logout' : 'Admin Login'}
+            title={user ? t('nav.logout') : t('nav.adminLogin')}
           >
             <span className="nav-icon">{user ? '🚪' : '🔐'}</span>
-            <span className="auth-text">{user ? 'Logout' : 'Login'}</span>
+            <span className="auth-text">{user ? t('nav.logout') : t('nav.login')}</span>
           </button>
           <DarkModeToggle />
           <LanguageSwitcher />

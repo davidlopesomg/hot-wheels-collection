@@ -5,7 +5,10 @@ export const en = {
     dashboard: "Dashboard",
     collection: "Collection",
     scanner: "Scanner",
-    admin: "Admin"
+    admin: "Admin",
+    login: "Login",
+    logout: "Logout",
+    adminLogin: "Admin Login"
   },
   
   // Dashboard
@@ -188,6 +191,9 @@ export const en = {
     title: "Administration",
     subtitle: "Manage brands, manufacturers, colors, and data import",
     comingSoon: "Coming Soon",
+    authRequired: "Authentication Required",
+    authMessage: "You must be logged in to access the admin panel.",
+    goToLogin: "Go to Login",
     tabs: {
       brands: "Brands",
       manufacturers: "Manufacturers",
@@ -340,6 +346,26 @@ export const en = {
       primaryColorColumn: "Primary color (optional)",
       secondaryColorsColumn: "Secondary colors, comma-separated (optional)",
       notesColumn: "Notes or theme (optional)"
+    }
+  },
+
+  // Login
+  login: {
+    subtitle: "Sign in to manage your Hot Wheels collection",
+    email: "Email",
+    password: "Password",
+    signingIn: "Signing in...",
+    signIn: "Sign In",
+    guestNotice: "Note:",
+    guestMessage: "Guests can view the collection without logging in.",
+    backToCollection: "Back to Collection",
+    errors: {
+      required: "Please enter both email and password",
+      invalidCredentials: "Invalid email or password",
+      userNotFound: "No user found with this email",
+      invalidEmail: "Invalid email format",
+      tooManyRequests: "Too many failed attempts. Please try again later",
+      generic: "Failed to sign in. Please try again"
     }
   }
 };
