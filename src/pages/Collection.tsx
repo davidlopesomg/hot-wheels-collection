@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { loadCollection, sortCars, filterCars, parseCSV, validateCSVStructure, saveCollection, addCar, updateCar, deleteCar, deleteCarsInBulk } from '../utils/dataManager';
 import { trackCSVImport } from '../utils/analytics';
 import { HotWheelsCar } from '../types';
@@ -11,6 +12,7 @@ import './Collection.css';
 
 const Collection = () => {
   const { t } = useLanguage();
+  const { isAdmin } = useAuth();
   const [cars, setCars] = useState<HotWheelsCar[]>([]);
   const [filteredCars, setFilteredCars] = useState<HotWheelsCar[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -208,21 +210,22 @@ const Collection = () => {
           <button 
             className="add-car-btn"
             onClick={() => setShowAddForm(true)}
-            disabled={loading}
+            disabled={loading || !isAdmin}
+            title={!isAdmin ? 'Admin login required' : ''}
           >
             ➕ {t('collection.addCar')}
           </button>
-          <label className={`file-upload-btn ${loading ? 'disabled' : ''}`}>
+          <label className={`file-upload-btn ${loading || !isAdmin ? 'disabled' : ''}`} title={!isAdmin ? 'Admin login required' : ''}>
             {loading ? t('collection.loading') || 'Loading...' : t('collection.importCSV')}
             <input
               type="file"
               accept=".csv"
               onChange={handleFileUpload}
               style={{ display: 'none' }}
-              disabled={loading}
+              disabled={loading || !isAdmin}
             />
           </label>
-          {selectedCarIds.length > 0 && (
+          {selectedCarIds.length > 0 && isAdmin && (
             <button 
               className="bulk-delete-btn"
               onClick={handleBulkDelete}
@@ -243,11 +246,13 @@ const Collection = () => {
           <thead>
             <tr>
               <th className="checkbox-col">
-                <input
-                  type="checkbox"
-                  checked={selectedCarIds.length === filteredCars.length && filteredCars.length > 0}
-                  onChange={handleSelectAll}
-                />
+                {isAdmin && (
+                  <input
+                    type="checkbox"
+                    checked={selectedCarIds.length === filteredCars.length && filteredCars.length > 0}
+                    onChange={handleSelectAll}
+                  />
+                )}
               </th>
               <th className="brand-col" onClick={() => handleSort('marca')}>
                 {t('collection.headers.brand')} {getSortIcon('marca')}
@@ -280,11 +285,13 @@ const Collection = () => {
             {filteredCars.map((car) => (
               <tr key={car.id} className={selectedCarIds.includes(car.id || '') ? 'selected' : ''}>
                 <td className="checkbox-col">
-                  <input
-                    type="checkbox"
-                    checked={selectedCarIds.includes(car.id || '')}
-                    onChange={() => handleSelectCar(car.id || '')}
-                  />
+                  {isAdmin && (
+                    <input
+                      type="checkbox"
+                      checked={selectedCarIds.includes(car.id || '')}
+                      onChange={() => handleSelectCar(car.id || '')}
+                    />
+                  )}
                 </td>
                 <td className="brand-col"><BrandIcon brandName={car.marca} size={40} /></td>
                 <td>{car.modelo}</td>
@@ -295,22 +302,29 @@ const Collection = () => {
                 <td><ManufacturerIcon manufacturerName={car.fabricante} size={40} /></td>
                 <td>{car.notasTema}</td>
                 <td className="actions-col">
-                  <button 
-                    className="action-btn edit-btn" 
-                    onClick={() => handleEditClick(car)}
-                    title={t('collection.actions.edit')}
-                    aria-label={t('collection.actions.edit')}
-                  >
-                    ✏️
-                  </button>
-                  <button 
-                    className="action-btn delete-btn" 
-                    onClick={() => handleDeleteCar(car.id || '')}
-                    title={t('collection.actions.delete')}
-                    aria-label={t('collection.actions.delete')}
-                  >
-                    🗑️
-                  </button>
+                  {isAdmin && (
+                    <>
+                      <button 
+                        className="action-btn edit-btn" 
+                        onClick={() => handleEditClick(car)}
+                        title={t('collection.actions.edit')}
+                        aria-label={t('collection.actions.edit')}
+                      >
+                        ✏️
+                      </button>
+                      <button 
+                        className="action-btn delete-btn" 
+                        onClick={() => handleDeleteCar(car.id || '')}
+                        title={t('collection.actions.delete')}
+                        aria-label={t('collection.actions.delete')}
+                      >
+                        🗑️
+                      </button>
+                    </>
+                  )}
+                  {!isAdmin && (
+                    <span className="admin-only-hint" title="Admin login required">🔒</span>
+                  )}
                 </td>
               </tr>
             ))}

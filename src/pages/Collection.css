@@ -635,3 +635,24 @@
 .dark-mode .file-upload-btn:hover:not(.disabled) {
   background: #3b8acc;
 }
+
+/* Admin Only Hint */
+.admin-only-hint {
+  font-size: 1.2rem;
+  color: var(--color-text-secondary);
+  cursor: help;
+  opacity: 0.6;
+}
+
+/* Disabled Buttons for Non-Admin */
+.add-car-btn:disabled,
+.file-upload-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+.add-car-btn:disabled:hover,
+.file-upload-btn.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}

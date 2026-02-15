@@ -2,28 +2,38 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
+    // Helper function to check if user is an admin
+    function isAdmin() {
+      return request.auth != null && 
+             (request.auth.uid == '1NR2aiLOV9f9JS3vf9NBwjIaM8q1' || 
+              request.auth.uid == 'G6QXRSUpqRQeT8GcrHJmNwAR6ya2');
+    }
+    
     // Cars collection - Hot Wheels cars data
     match /cars/{carId} {
-      // Anyone can read
+      // Anyone can read (guests can view collection)
       allow read: if true;
       
+      // Only specific admins can write
       // Validate required fields on create
-      allow create: if request.resource.data.keys().hasAll(['carNumber', 'carName', 'brand', 'dateAdded'])
+      allow create: if isAdmin()
+                    && request.resource.data.keys().hasAll(['carNumber', 'carName', 'brand', 'dateAdded'])
                     && request.resource.data.carNumber is string
                     && request.resource.data.carName is string
                     && request.resource.data.brand is string
                     && request.resource.data.dateAdded is timestamp;
       
-      // Allow updates with field validation
-      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+      // Only specific admins can update
+      allow update: if isAdmin()
+                    && request.resource.data.diff(resource.data).affectedKeys()
                     .hasOnly(['carNumber', 'carName', 'brand', 'manufacturer', 
                              'series', 'year', 'color', 'baseColor', 'tampo', 
                              'wheelType', 'baseType', 'windowColor', 'interiorColor', 
                              'countryMade', 'toyNumber', 'segment', 'upcCode', 'notes', 
                              'dateAdded', 'dateModified']);
       
-      // Allow delete
-      allow delete: if true;
+      // Only specific admins can delete
+      allow delete: if isAdmin();
     }
     
     // Custom manufacturers collection
@@ -31,18 +41,20 @@ service cloud.firestore {
       // Anyone can read
       allow read: if true;
       
-      // Validate required fields on create
-      allow create: if request.resource.data.keys().hasAll(['name'])
+      // Only specific admins can write
+      allow create: if isAdmin()
+                    && request.resource.data.keys().hasAll(['name'])
                     && request.resource.data.name is string
                     && request.resource.data.name.size() > 0
                     && request.resource.data.name.size() <= 100;
       
-      // Allow updates to name, logoUrl, and timestamps
-      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+      // Only specific admins can update
+      allow update: if isAdmin()
+                    && request.resource.data.diff(resource.data).affectedKeys()
                     .hasOnly(['name', 'logoUrl', 'createdAt', 'modifiedAt']);
       
-      // Allow delete
-      allow delete: if true;
+      // Only specific admins can delete
+      allow delete: if isAdmin();
     }
     
     // Custom brands collection
@@ -50,18 +62,20 @@ service cloud.firestore {
       // Anyone can read
       allow read: if true;
       
-      // Validate required fields on create
-      allow create: if request.resource.data.keys().hasAll(['name'])
+      // Only specific admins can write
+      allow create: if isAdmin()
+                    && request.resource.data.keys().hasAll(['name'])
                     && request.resource.data.name is string
                     && request.resource.data.name.size() > 0
                     && request.resource.data.name.size() <= 100;
       
-      // Allow updates to name, logoUrl, and timestamps
-      allow update: if request.resource.data.diff(resource.data).affectedKeys()
+      // Only specific admins can update
+      allow update: if isAdmin()
+                    && request.resource.data.diff(resource.data).affectedKeys()
                     .hasOnly(['name', 'logoUrl', 'createdAt', 'modifiedAt']);
       
-      // Allow delete
-      allow delete: if true;
+      // Only specific admins can delete
+      allow delete: if isAdmin();
     }
   }
 }

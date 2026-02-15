@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 // Your Firebase configuration
 // Replace these values with your own from Firebase Console
@@ -18,6 +19,9 @@ const app = initializeApp(firebaseConfig);
 
 // Initialize Firestore
 export const db = getFirestore(app);
+
+// Initialize Authentication
+export const auth = getAuth(app);
 
 // Export measurement ID for Google Analytics
 export const measurementId = firebaseConfig.measurementId;

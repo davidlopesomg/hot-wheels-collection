@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import BrandManager from '../components/BrandManager';
 import ManufacturerManager from '../components/ManufacturerManager';
 import { parseCSV, validateCSVStructure, saveCollection } from '../utils/dataManager';
@@ -8,8 +10,31 @@ import './Admin.css';
 
 const Admin = () => {
   const { t } = useLanguage();
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'brands' | 'manufacturers' | 'colors' | 'import'>('brands');
   const [importing, setImporting] = useState(false);
+
+  // Protect admin page - only authenticated users
+  if (!isAdmin) {
+    return (
+      <div className="admin-container">
+        <div className="auth-required-message">
+          <div className="auth-required-card">
+            <span className="auth-icon">🔐</span>
+            <h2>{t('admin.authRequired', 'Authentication Required')}</h2>
+            <p>{t('admin.authMessage', 'You must be logged in to access the admin panel.')}</p>
+            <button 
+              className="btn-primary"
+              onClick={() => navigate('/login')}
+            >
+              {t('admin.goToLogin', 'Go to Login')}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

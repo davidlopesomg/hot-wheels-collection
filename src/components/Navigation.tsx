@@ -1,12 +1,30 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import LanguageSwitcher from './LanguageSwitcher';
 import DarkModeToggle from './DarkModeToggle';
 import './Navigation.css';
 
 const Navigation = () => {
   const { t } = useLanguage();
+  const { user, signOut, isAdmin } = useAuth();
+  const navigate = useNavigate();
   const baseUrl = import.meta.env.BASE_URL;
+
+  const handleAuthClick = async () => {
+    if (user) {
+      // Logout
+      try {
+        await signOut();
+        navigate('/');
+      } catch (error) {
+        console.error('Logout error:', error);
+      }
+    } else {
+      // Login
+      navigate('/login');
+    }
+  };
   
   return (
     <nav className="navigation">
@@ -37,12 +55,22 @@ const Navigation = () => {
             <span className="nav-icon">📷</span>
             <span>{t('nav.scanner')}</span>
           </NavLink>
-          <NavLink to="/admin" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-            <span className="nav-icon">⚙️</span>
-            <span>{t('nav.admin')}</span>
-          </NavLink>
+          {isAdmin && (
+            <NavLink to="/admin" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
+              <span className="nav-icon">⚙️</span>
+              <span>{t('nav.admin')}</span>
+            </NavLink>
+          )}
         </div>
         <div className="nav-controls">
+          <button 
+            className="btn-auth" 
+            onClick={handleAuthClick}
+            title={user ? 'Logout' : 'Admin Login'}
+          >
+            <span className="nav-icon">{user ? '🚪' : '🔐'}</span>
+            <span className="auth-text">{user ? 'Logout' : 'Login'}</span>
+          </button>
           <DarkModeToggle />
           <LanguageSwitcher />
         </div>

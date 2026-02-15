@@ -2,12 +2,14 @@ import { useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { DarkModeProvider } from './contexts/DarkModeContext';
+import { AuthProvider } from './contexts/AuthContext';
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import Dashboard from './pages/Dashboard';
 import Collection from './pages/Collection';
 import Scanner from './pages/Scanner';
 import Admin from './pages/Admin';
+import Login from './pages/Login';
 import { initGA, trackPageView } from './utils/analytics';
 import './App.css';
 
@@ -28,6 +30,7 @@ function AppContent() {
           <Route path="/collection" element={<Collection />} />
           <Route path="/scanner" element={<Scanner />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
       <Footer />
@@ -44,9 +47,11 @@ function App() {
   return (
     <DarkModeProvider>
       <LanguageProvider>
-        <HashRouter>
-          <AppContent />
-        </HashRouter>
+        <AuthProvider>
+          <HashRouter>
+            <AppContent />
+          </HashRouter>
+        </AuthProvider>
       </LanguageProvider>
     </DarkModeProvider>
   );
