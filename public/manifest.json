@@ -2,12 +2,12 @@
   "name": "Hot Wheels Collection Manager",
   "short_name": "Hot Wheels",
   "description": "Track and manage your Hot Wheels car collection",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#18191a",
   "theme_color": "#2C84C7",
   "orientation": "portrait-primary",
-  "scope": "/",
+  "scope": ".",
   "icons": [
     {
       "src": "assets/img/hot-wheels-app-icon.svg",
@@ -43,13 +43,13 @@
   "categories": ["entertainment", "lifestyle", "utilities"],
   "screenshots": [
     {
-      "src": "/assets/img/screenshot-desktop.png",
+      "src": "assets/img/screenshot-desktop.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "/assets/img/screenshot-mobile.png",
+      "src": "assets/img/screenshot-mobile.png",
       "sizes": "540x960",
       "type": "image/png",
       "form_factor": "narrow"
@@ -60,15 +60,15 @@
       "name": "Add Car",
       "short_name": "Add",
       "description": "Add a new car to your collection",
-      "url": "/#/collection",
-      "icons": [{ "src": "/assets/img/hot-wheels-app-icon.svg", "sizes": "192x192" }]
+      "url": "./#/collection",
+      "icons": [{ "src": "assets/img/hot-wheels-app-icon.svg", "sizes": "192x192" }]
     },
     {
       "name": "Dashboard",
       "short_name": "Dashboard",
       "description": "View collection statistics",
-      "url": "/#/dashboard",
-      "icons": [{ "src": "/assets/img/hot-wheels-app-icon.svg", "sizes": "192x192" }]
+      "url": "./#/dashboard",
+      "icons": [{ "src": "assets/img/hot-wheels-app-icon.svg", "sizes": "192x192" }]
     }
   ]
 }

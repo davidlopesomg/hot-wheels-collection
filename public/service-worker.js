@@ -1,9 +1,9 @@
-const CACHE_NAME = 'hot-wheels-v1';
+const CACHE_NAME = 'hot-wheels-v2';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/assets/img/hot-wheels-app-icon.svg'
+  './',
+  './index.html',
+  './manifest.json',
+  './assets/img/hot-wheels-app-icon.svg'
 ];
 
 // Install service worker
@@ -75,8 +75,8 @@ self.addEventListener('fetch', (event) => {
             if (response) {
               return response;
             }
-            // Return a custom offline page if available
-            return caches.match('/index.html');
+            // Return index.html for SPA routing
+            return caches.match('./index.html');
           });
       })
   );
